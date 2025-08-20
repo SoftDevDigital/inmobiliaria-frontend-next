@@ -1,0 +1,89 @@
+.section {
+  padding: 80px 0;
+  /* si algún navegador muestra 1px de scroll horizontal, descomenta: */
+  /* overflow-x: clip; */
+}
+
+/* 4 columnas en desktop SIN desbordar el viewport */
+.grid {
+  /* paddings y gap fluidos */
+  --pad: clamp(24px, 8vw, 150px);
+  --gap: clamp(20px, 2.5vw, 40px);
+
+  display: grid;
+  gap: var(--gap);
+  padding-inline: var(--pad);
+
+  /* calcula el ancho de CADA columna con el espacio disponible:
+     (viewport - paddings - gaps) / 4  */
+  grid-template-columns: repeat(
+    4,
+    minmax(0, calc((100vw - (2 * var(--pad)) - (3 * var(--gap))) / 4))
+  );
+
+  /* que nunca sea más ancho que la ventana */
+  max-width: 100vw;
+  margin-inline: auto;
+  align-items: stretch;
+}
+
+/* tablet: 2 columnas */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-inline: 24px;
+    gap: 32px;
+  }
+}
+
+/* mobile: 1 columna */
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ...lo que ya tenés... */
+
+/* Icono centrado y responsivo */
+.icon {
+  width: clamp(64px, 10vw, 129px);
+  height: clamp(64px, 10vw, 129px);
+  display: grid;
+  place-items: center;
+  margin-bottom: clamp(10px, 1.2vw, 16px);
+}
+
+/* <<< Cambiá esta regla por estas dos >>> */
+.icon :is(svg, img) { 
+  width: 100%; 
+  height: 100%; 
+  display: block;
+}
+.icon img { 
+  object-fit: contain; 
+}
+
+/* ...resto igual... */
+/* --- ya lo tienes --- */
+
+/* tablet */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-inline: 24px;
+    gap: 32px;
+  }
+}
+
+/* mobile */
+@media (max-width: 560px) {
+  .section {
+    padding: 40px 0 56px;              /* menos alto en mobile */
+  }
+  .grid {
+    grid-template-columns: 1fr;        /* una columna */
+    padding-inline: 16px;              /* menos margen lateral */
+    gap: 20px;                         /* menor distancia entre cards */
+  }
+}

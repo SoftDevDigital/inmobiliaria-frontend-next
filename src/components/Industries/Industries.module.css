@@ -1,0 +1,742 @@
+/* ============ Industries.module.css ============ */
+
+/* DESKTOP (sin tocar tu layout) */
+.section{
+  --stage-w: clamp(640px, 44vw, 850px);
+  --stage-h: clamp(340px, 23vw, 452px);
+
+  --card-w:  clamp(300px, 28vw, 420px);
+  --card-h:  clamp(300px, 28vw, 420px);
+  --card-h-side: clamp(210px, 20vw, 300px);
+
+  --arrow-gap: clamp(12px, 2vw, 40px);
+  --gap-top: clamp(72px, 10vw, 120px);
+  --card-offset: clamp(16px, 2.2vw, 32px);
+
+  padding: 48px 0 96px;
+}
+
+.head{
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 24px;
+  padding-left: 150px;
+  padding-right: 150px;
+  margin-bottom: var(--gap-top);
+}
+
+.menuBtn{
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  color: #000;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.tabs{
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.tab{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: default;
+  font-family: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 1;
+  color: #d9d9d9;
+}
+.active{ font-weight: 700; font-size: 48px; color: #000; }
+.chevL,.chevR{ color:#000; flex:0 0 auto; }
+.chevL{ margin-right: 8px; }
+.chevR{ margin-left: 8px; }
+
+.sliderWrap{ position: relative; z-index: 1; }
+
+.stage{
+  position: relative;
+  width: var(--stage-w);
+  height: var(--stage-h);
+  margin: 0 auto;
+}
+
+.card{
+  position: absolute;
+  border-radius: 40px;
+  overflow: hidden;
+  background: #111;
+  box-shadow: 0 18px 32px rgba(0,0,0,.35);
+}
+
+.center{
+  width: var(--card-w);
+  height: var(--card-h);
+  left: 50%;
+  top: var(--card-offset);
+  transform: translateX(-50%);
+  z-index: 3;
+}
+.leftCard{
+  width: var(--card-w);
+  height: var(--card-h-side);
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+}
+.cardRight{
+  width: var(--card-w);
+  height: var(--card-h-side);
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.logoImg{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #111;
+  display: block;
+}
+
+.arrow{
+  position: absolute;
+  top: calc(var(--card-offset) + var(--card-h)/2);
+  transform: translateY(-50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.08);
+  color: #111;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 5;
+  box-shadow: 0 8px 22px rgba(0,0,0,.18);
+}
+.arrow svg{ width: 28px; height: 28px; }
+.arrow:hover{ transform: translateY(-50%) scale(1.06); }
+.arrow:focus-visible{ outline: 3px solid #111; outline-offset: 2px; }
+.left  { left:  calc(50% - var(--stage-w)/2 - var(--arrow-gap)); }
+.right { right: calc(50% - var(--stage-w)/2 - var(--arrow-gap)); }
+
+/* ---------- Ajustes generales tablet ---------- */
+@media (max-width: 1200px){
+  .head{ padding-left: 24px; padding-right: 24px; }
+}
+@media (max-width: 900px){
+  .tabs{ gap: 20px; }
+  .tab{ font-size: 24px; }
+  .active{ font-size: 28px; }
+
+  .section{
+    --stage-w: min(92vw, 850px);
+    --stage-h: min(60vw, 452px);
+    --card-w: min(48vw, 420px);
+    --card-h: min(48vw, 420px);
+    --card-h-side: min(28vw, 300px);
+    --arrow-gap: 16px;
+    --gap-top: clamp(56px, 7vw, 80px);
+    --card-offset: clamp(12px, 2vw, 20px);
+  }
+
+  .arrow{ top: 50%; transform: translateY(-50%); }
+}
+
+/* ========== MOBILE: iPhone 14/15 (≤430px), 12/13 (≤390px), SE (≤375px) ========== */
+@media (max-width: 430px){
+  /* 1) que nada desborde a los lados */
+  .section{ overflow-x: clip; padding: 32px 0 72px; }
+
+  /* 2) tabs en UNA sola fila con scroll suave */
+  .head{
+    grid-template-columns: auto 1fr;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin-bottom: 24px;            /* deja aire sobre el carrusel */
+  }
+  .tabs{
+    flex-wrap: nowrap;               /* no romper a varias líneas */
+    gap: 24px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar{ display: none; }
+  .tab{ font-size: 16px; }
+  .active{ font-size: 20px; }
+  .chevL,.chevR{ width: 24px; height: 24px; }
+
+  /* 3) variables del carrusel recalculadas para mobile */
+  .section{
+    --stage-w: 88vw;                 /* escenario un poco más chico */
+    --card-w: 66vw;                  /* card central grande, legible */
+    --card-h: 66vw;
+    --card-h-side: 42vw;             /* cards laterales más bajitas */
+    --stage-h: calc(var(--card-h) + 28px); /* alto suficiente del stage */
+    --card-offset: 12px;             /* separa del borde superior */
+    --arrow-gap: 10px;               /* mete las flechas dentro */
+  }
+
+  /* 4) flechas más compactas y centradas verticalmente */
+  .arrow{ width: 44px; height: 44px; top: 50%; }
+  .arrow svg{ width: 20px; height: 20px; }
+
+  /* 5) bordes más redondeados en móvil */
+  .card{ border-radius: 28px; }
+}
+
+/* iPhone 12/13 (≤390px): un puntito más compacto */
+@media (max-width: 390px){
+  .tab{ font-size: 15px; }
+  .active{ font-size: 18px; }
+  .section{
+    --card-w: 68vw;
+    --card-h: 68vw;
+    --card-h-side: 44vw;
+  }
+}
+
+/* iPhone SE (≤375px): el más ajustado */
+@media (max-width: 375px){
+  .head{ padding-left: 12px; padding-right: 12px; }
+  .tabs{ gap: 18px; }
+  .tab{ font-size: 14px; }
+  .active{ font-size: 17px; }
+
+  .section{
+    --stage-w: 90vw;
+    --card-w: 70vw;
+    --card-h: 70vw;
+    --card-h-side: 46vw;
+    --arrow-gap: 8px;
+  }
+
+  .arrow{ width: 40px; height: 40px; }
+  .arrow svg{ width: 18px; height: 18px; }
+}
+
+
+@media (max-width: 430px){
+  /* Evita desbordes laterales y ajusta separación vertical */
+  .section{ overflow-x: clip; padding: 28px 0 64px; }
+
+  /* Cabecera y tira de tabs en una sola fila con scroll suave */
+  .head{
+    position: relative;
+    grid-template-columns: auto 1fr;
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-bottom: 22px;
+  }
+
+  .tabs{
+    flex-wrap: nowrap;                  /* una línea */
+    gap: 18px;
+    padding-inline: 8px;                /* espacio para que no “pegue” contra los bordes */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;      /* snap suave */
+  }
+  .tabs::-webkit-scrollbar{ display: none; }
+
+  .tab{
+    font-size: 15px;
+    white-space: nowrap;                /* que no corte palabras */
+    scroll-snap-align: start;           /* cada item hace snap al inicio */
+  }
+
+  /* En móvil escondemos los chevrons del tab activo para ganar ancho */
+  .chevL, .chevR{ display: none; }
+
+  /* Desvanecidos laterales para indicar que hay más pestañas desplazables */
+  .head::before,
+  .head::after{
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 24px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .head::before{
+    left: 0;
+    background: linear-gradient(90deg, #fff 0%, rgba(255,255,255,0) 100%);
+  }
+  .head::after{
+    right: 0;
+    background: linear-gradient(270deg, #fff 0%, rgba(255,255,255,0) 100%);
+  }
+
+  /* Carrusel más proporcionado en pantallas angostas */
+  .section{
+    --stage-w: 90vw;
+    --card-w: 68vw;
+    --card-h: 68vw;
+    --card-h-side: 44vw;
+    --stage-h: calc(var(--card-h) + 26px);
+    --card-offset: 10px;
+    --arrow-gap: 10px;
+  }
+
+  .card{ border-radius: 26px; }
+
+  .arrow{
+    width: 42px; height: 42px; top: 50%;
+  }
+  .arrow svg{ width: 18px; height: 18px; }
+}
+
+/* iPhone 12/13 (≤ 390px): apenas más compacto */
+@media (max-width: 390px){
+  .tab{ font-size: 14px; }
+  .section{
+    --card-w: 70vw;
+    --card-h: 70vw;
+    --card-h-side: 46vw;
+  }
+}
+
+/* iPhone SE (≤ 375px): el ajuste más fuerte */
+@media (max-width: 375px){
+  .tabs{ gap: 16px; padding-inline: 6px; }
+  .tab{ font-size: 13.5px; }
+  .section{
+    --stage-w: 92vw;
+    --card-w: 72vw;
+    --card-h: 72vw;
+    --card-h-side: 48vw;
+    --arrow-gap: 8px;
+  }
+  .arrow{ width: 38px; height: 38px; }
+  .arrow svg{ width: 16px; height: 16px; }
+}
+
+/* --- oscurecer las tarjetas de atrás --- */
+
+/* Preparamos un overlay que por defecto está oculto */
+.card::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #000;          /* color del oscurecido */
+  opacity: 0;                /* oculto por defecto */
+  transition: opacity .28s ease;
+  pointer-events: none;      /* no bloquea clicks */
+}
+
+/* En las laterales (no-centro) lo mostramos */
+.leftCard::after,
+.cardRight::after{
+  opacity: .48;              /* ← intensidad del oscurecido (0–1) */
+}
+
+/* Opcional: una transición linda al mover el carrusel */
+.card{
+  transition: box-shadow .28s ease, transform .28s ease;
+}
+
+
+/* Botón del nombre del tab (el texto clickeable) */
+.tabBtn{
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Botones de flecha junto al tab activo */
+.chevBtn{
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0 4px;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Overlay para tapar el fondo */
+.menuOverlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+  z-index: 40;
+}
+.menuOverlay[data-open="true"]{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Panel de categorías (drawer en mobile, popover en desktop) */
+.menuPanel{
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 320px;
+  max-width: 86vw;
+  background: #fff;
+  transform: translateX(-100%);
+  transition: transform .28s ease;
+  z-index: 41;
+  padding: 20px 16px;
+  box-shadow: 0 24px 48px rgba(0,0,0,.24);
+  border-right: 1px solid #eee;
+  display: grid;
+  gap: 8px;
+}
+.menuPanel[data-open="true"]{ transform: translateX(0); }
+
+.menuItem{
+  appearance: none;
+  background: transparent;
+  border: 0;
+  text-align: left;
+  font: 500 18px/1.2 "IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  padding: 12px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #111;
+}
+.menuItem:hover{ background: #f5f5f5; }
+.menuItemActive{
+  background: #111;
+  color: #fff;
+}
+
+/* En desktop lo convertimos en popover */
+@media (min-width: 960px){
+  .menuPanel{
+    height: auto;
+    max-height: 70vh;
+    width: 260px;
+    top: 96px;            /* cae cerca del header */
+    left: 150px;          /* alineado con paddings de tu .head */
+    border-radius: 12px;
+    transform: translateY(-8px);
+    overflow: auto;
+  }
+  .menuPanel[data-open="true"]{ transform: translateY(0); }
+}
+
+
+/* En desktop lo convertimos en popover */
+@media (min-width: 960px){
+  .menuPanel{
+    height: auto;
+    max-height: 70vh;
+    width: 260px;
+    top: 96px;            /* cerca del header */
+    left: 150px;          /* alineado con tus paddings */
+    border-radius: 12px;
+    overflow: auto;
+
+    /* --- CERRADO por defecto (desktop) --- */
+    transform: translateY(-8px) scale(.98);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* --- ABIERTO --- */
+  .menuPanel[data-open="true"]{
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* Tabs en una sola fila */
+.tabs{
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: nowrap;     /* <- importante */
+  overflow: hidden;      /* por si el contenedor es angosto */
+  justify-content: center;
+}
+.tab{ flex: 0 0 auto; }  /* que no se encojan */
+/* Desktop: ventana centrada sin scroll */
+@media (min-width: 960px){
+  .tabs{
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: nowrap;
+    overflow: hidden;        /* solo desktop */
+    justify-content: center;
+  }
+  .tab{ flex: 0 0 auto; }
+}
+
+/* Mobile / tablet: mostramos flechas y permitimos scroll horizontal */
+@media (max-width: 900px){
+  .tabs{
+    flex-wrap: nowrap;
+    overflow-x: auto;                /* vuelve el scroll en mobile */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    touch-action: pan-x;             /* gestos horizontales suaves */
+  }
+  .tabs::-webkit-scrollbar{ display: none; }
+
+  /* Flechas junto al tab activo */
+  .chevBtn{
+    width: 40px; height: 40px;
+    margin: 0 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+  .chevL, .chevR{                 /* ¡ya no ocultas! */
+    display: block;
+    width: 22px; height: 22px;
+  }
+}
+
+/* ===== Flechas fijas alrededor del tab activo ===== */
+
+/* Anchos constantes para flechas y zona de texto del tab activo */
+.tabs{
+  --chev: 46px;                                   /* ancho/alto de cada flecha (desktop) */
+  --labelW: clamp(200px, 24vw, 420px);            /* ancho fijo del texto del tab activo */
+}
+
+/* El tab activo pasa de inline-flex a GRID: [flecha][texto fijo][flecha] */
+.active{
+  display: grid;
+  grid-template-columns: var(--chev) var(--labelW) var(--chev);
+  align-items: center;
+  gap: 0;                                         /* ignora el gap del .tab */
+}
+
+/* Ubicación de cada pieza dentro del grid del tab activo */
+.active .chevBtn{ grid-row: 1; justify-self: center; }
+.active .chevL{ grid-column: 1; }
+.active .tabBtn{ grid-column: 2; width: 100%; }    /* el botón ocupa toda la columna central */
+.active .chevR{ grid-column: 3; }
+
+/* El texto se adapta dentro de un ancho fijo */
+.tabLabel{
+  display: block;
+  text-align: center;
+  white-space: nowrap;                             /* una sola línea en desktop */
+  overflow: hidden;
+  text-overflow: ellipsis;                         /* … si no entra */
+}
+
+/* Tamaños en móviles (si usas flechas en mobile, ajusta aquí) */
+@media (max-width: 900px){
+  .tabs{
+    --chev: 40px;
+    --labelW: clamp(140px, 60vw, 260px);
+  }
+}
+
+/* Si en mobile ocultas flechas (tú ya lo haces a ≤430px) el ancho fijo queda para centrar el texto. 
+   Y dejamos que el texto pueda ir hasta 2 líneas para que no se corte tanto. */
+@media (max-width: 430px){
+  .tabLabel{
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;                         /* hasta 2 líneas */
+    -webkit-box-orient: vertical;
+  }
+}
+
+.tabs{
+  /* tamaños base (desktop) */
+  --chev: 46px;                                /* ancho/alto flechas */
+  --track: clamp(220px, 28vw, 460px);          /* carril del texto */
+
+  display: grid;
+  grid-template-columns: var(--chev) var(--track) var(--chev);
+  align-items: center;
+  justify-content: center;
+  column-gap: 12px;
+
+  /* anulamos estilos previos heredados */
+  gap: 0;
+  overflow: visible;
+}
+
+.chevBtn{
+  width: var(--chev);
+  height: var(--chev);
+  background: transparent;
+  border: 0;
+  color: #000;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+.chevL,.chevR{ width: 100%; height: 100%; }
+
+.tabBtn{
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 0 6px;
+  cursor: pointer;
+  color: #000;
+  font-family: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight: 700;
+  font-size: 48px;              /* mismo tamaño del activo que tenías */
+  line-height: 1;
+}
+
+.tabLabel{
+  display: block;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;      /* si no entra, … */
+}
+
+/* tablet */
+@media (max-width: 900px){
+  .tabs{ --chev: 40px; --track: clamp(180px, 60vw, 320px); }
+  .tabBtn{ font-size: 28px; }
+}
+
+/* iPhone 14/15 (≤430px) */
+@media (max-width: 430px){
+  .tabs{ --chev: 36px; --track: clamp(160px, 64vw, 300px); }
+  .tabBtn{ font-size: 20px; }
+
+  /* Permitimos hasta 2 líneas si la palabra es larga */
+  .tabLabel{
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+}
+
+/* iPhone SE (≤375px) */
+@media (max-width: 375px){
+  .tabs{ --chev: 34px; --track: clamp(150px, 66vw, 280px); }
+  .tabBtn{ font-size: 17px; }
+}
+
+/* Carril central de ancho fijo (usa tu --track de .tabs) */
+.track{
+  display: grid;
+  grid-template-columns: auto 1fr auto; /* [chip izq][activo][chip der] */
+  align-items: center;
+  column-gap: 12px;
+  min-width: 0; /* permite que el centro haga ellipsis si falta espacio */
+}
+
+/* Chips laterales (categorías vecinas) */
+.sideBtn{
+  background: transparent;
+  border: 0;
+  padding: 0 6px;
+  cursor: pointer;
+  color: #9a9a9a;
+  font-family: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1;
+  white-space: nowrap;
+  max-width: 160px;          /* límite para que no empujen al centro */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color .15s ease;
+}
+.sideBtn:hover{ color: #000; }
+
+/* El activo del medio ya lo tenés con .tabBtn/.tabLabel */
+.tabBtn{ justify-self: center; }   /* mantiene el label centrado */
+.tabLabel{
+  display:block;
+  text-align:center;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* Tablet */
+@media (max-width: 900px){
+  .sideBtn{ font-size: 18px; max-width: 120px; }
+}
+
+/* Mobile: por espacio, ocultamos los chips y queda solo el activo + flechas */
+@media (max-width: 430px){
+  .sideBtn{ display: none; }
+  /* permitimos 2 líneas en el activo (ya lo tenías) */
+  .tabLabel{
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+}
+
+@media (max-width: 430px){
+  .tabs{ --track: clamp(150px, 58vw, 280px); } /* antes: 160px/64vw/300px */
+}
+
+@media (max-width: 430px){
+  .tabs{
+    --track: clamp(150px, 40vw, 200px); /* antes: 150px,58vw,280px */
+    column-gap: 6px;                    /* antes: 12px */
+  }
+  .tabBtn{ padding: 0 2px; }            /* opcional: menos padding interno */
+}
+
+@media (min-width: 960px){
+  .tabs{
+    --track: clamp(360px, 34vw, 700px); /* antes 220px/28vw/460px */
+    column-gap: 14px;                   /* antes 12px */
+  }
+}
+
+/* Quitar margen heredado de las flechas en el header */
+.head .chevL,
+.head .chevR{
+  margin: 0 !important;
+}
+
+/* Hacer más corto el carril y permitir que el botón se encoja */
+@media (max-width: 430px){
+  .tabs{
+    --chev: 34px;                         /* flechas un toque más chicas */
+    --track: clamp(120px, 36vw, 180px);   /* carril más estrecho */
+    column-gap: 6px;
+  }
+  .tabBtn{ min-width: 0; }                /* evita que empuje a la flecha */
+}
+
+/* Micro-ajuste óptico: acercar SOLO la flecha derecha si aún la ves lejos */
+@media (max-width: 430px){
+  .tabs .chevBtn:last-child{ margin-left: -6px; } /* prueba -4/-8 según gusto */
+}

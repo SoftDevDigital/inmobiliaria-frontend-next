@@ -1,0 +1,85 @@
+.footer{
+  background:#000;
+  color:#fff;
+  padding: clamp(18px, 3vw, 28px) 0;
+}
+
+.container{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 6vw, 150px);
+
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;        /* mobile: uno debajo del otro */
+  align-items: center;
+  justify-items: start;
+}
+
+.item{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+
+  color: #fff;
+  text-decoration: none;
+
+  padding: 10px 12px;
+  border-radius: 12px;
+  transition: background .2s ease, transform .08s ease;
+}
+
+.item:hover{
+  background: rgba(255,255,255,.08);
+}
+
+.item:active{
+  transform: translateY(1px);
+}
+
+.item:focus-visible{
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  background: rgba(255,255,255,.10);
+}
+
+.icon{
+  width: 23px;
+  height: 22px;
+  flex: 0 0 auto;
+  color: #fff;
+}
+
+.label{
+  font: 500 15px/1.2 "IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  letter-spacing: .2px;
+}
+
+/* Desktop: tres columnas separadas */
+@media (min-width: 980px){
+  .container{
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+  }
+  .item{
+    justify-self: center;
+  }
+}
+
+
+.icon { color: #25D366; }
+
+/* Tamaño y baseline consistente */
+.icon,
+.waIcon{
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  display: block;          /* evita “fuzziness” en algunos navegadores */
+}
+
+/* Solo el ícono de WhatsApp en verde */
+.whatsapp .waIcon { color: #25D366; }
+
+/* El auricular SIEMPRE blanco para contraste */
+.waPhone { fill: #fff; }

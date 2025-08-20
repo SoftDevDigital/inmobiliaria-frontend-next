@@ -1,0 +1,337 @@
+.section {
+  padding: clamp(24px, 4vw, 64px) 0;
+}
+
+/* Contenedor principal */
+.card {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #f2f2f2;
+  border-radius: 28px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.24);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr; /* mobile */
+}
+
+/* Lado imagen (oculto en mobile) */
+.media {
+  display: none;
+  position: relative;
+  min-height: 420px;
+}
+.bg {
+  object-fit: cover;
+}
+.mark {
+  position: absolute;
+  left: clamp(18px, 3vw, 40px);
+  top: clamp(18px, 3vw, 40px);
+  width: clamp(72px, 10vw, 140px);
+  height: clamp(72px, 10vw, 140px);
+  background: rgba(255, 255, 255, 0.92);
+  color: #111;
+  font: 800 clamp(22px, 3vw, 40px) / 1 "IBM Plex Sans", system-ui, sans-serif;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+}
+
+/* Lado formulario */
+.formWrap {
+  padding: clamp(16px, 3vw, 32px);
+}
+
+/* Tabs */
+.tabs {
+  display: inline-flex;
+  gap: 8px;
+  margin-bottom: clamp(12px, 2.5vw, 18px);
+}
+.tab {
+  border: 0;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font: 700 13px/1 "IBM Plex Sans", system-ui, sans-serif;
+  background: #e7e7e7;
+  color: #111;
+  cursor: pointer;
+}
+.active {
+  background: #111;
+  color: #fff;
+}
+
+/* Form */
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(10px, 2vw, 18px);
+}
+
+/* ⬇⬇ Scoped para CSS Modules */
+.form label {
+  display: grid;
+  gap: 6px;
+  font: 600 13px/1.2 "IBM Plex Sans", system-ui, sans-serif;
+  color: #111;
+}
+
+.form input,
+.form textarea {
+  width: 100%;
+  border: 1px solid #dadada;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fff;
+  font: 500 15px/1.2 "IBM Plex Sans", system-ui, sans-serif;
+}
+
+.form textarea {
+  resize: vertical;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+/* Fila con acciones a la derecha */
+.row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: end;
+}
+.stretch {
+  display: grid;
+  gap: 6px;
+}
+.actions {
+  display: flex;
+  gap: 10px;
+}
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  border: 0;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+.hidden {
+  display: none;
+}
+
+/* Footer */
+.footer {
+  grid-column: 1 / -1;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.meta {
+  margin: 0;
+  font: 500 12px/1.2 "IBM Plex Sans", system-ui, sans-serif;
+  color: #444;
+}
+.submit {
+  border: 0;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  padding: 10px 24px;
+  cursor: pointer;
+}
+
+/* Desktop: mostramos la imagen a la izquierda */
+@media (min-width: 980px) {
+  .card {
+    grid-template-columns: 1.05fr 1.25fr;
+  }
+  .media {
+    display: block;
+  }
+  .formWrap {
+    padding: clamp(24px, 3vw, 40px);
+  }
+}
+
+
+/* Lado imagen (oculto en mobile) */
+.media{
+  display:none;
+  position:relative;
+  min-height:420px;
+  overflow:hidden;               /* por las esquinas redondeadas del .card */
+}
+
+/* oscurece un poco para que el logo blanco resalte */
+.media::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(120% 80% at 80% 100%, rgba(205,109,0,.38) 0%, rgba(205,109,0,0) 60%)
+    ,linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,.25) 40%, rgba(0,0,0,.10) 100%);
+  pointer-events:none;
+}
+
+.bg{ object-fit:cover; }
+
+/* ← NUEVO: logo centrado, grande, con leve sombra */
+.brand{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+  width:clamp(140px, 22vw, 320px);
+  height:auto;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,.35));
+  pointer-events:none;
+}
+
+/* Desktop: mostramos la imagen a la izquierda */
+@media (min-width:980px){
+  .media{ display:block; }
+}
+
+
+/* Lado imagen (oculto en mobile) */
+.media{
+  display:none;
+  position:relative;
+  min-height:420px;
+  overflow:hidden; /* respeta esquinas redondeadas del .card */
+}
+
+.bg{
+  object-fit:cover;
+}
+
+/* Oscurece para que el logo blanco resalte */
+.media::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(120% 80% at 80% 100%, rgba(205,109,0,.38) 0%, rgba(205,109,0,0) 60%),
+    linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,.25) 40%, rgba(0,0,0,.10) 100%);
+  pointer-events:none;
+}
+
+/* Logo centrado, blanco, con sombra suave */
+.brand{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+  width:clamp(140px, 22vw, 320px);
+  height:auto;
+  /* Si tu logoC.png no es blanco, lo forzamos a blanco: */
+  filter: brightness(0) invert(1) drop-shadow(0 8px 24px rgba(0,0,0,.35));
+  pointer-events:none;
+}
+
+/* En desktop sí mostramos el lado imagen */
+@media (min-width:980px){
+  .media{ display:block; }
+}
+
+
+/* =========================
+   FIX MOBILE (iPhone SE/12/14)
+   ========================= */
+
+/* 1 columna, paddings y tipografías más compactas */
+@media (max-width: 560px){
+  .section{ padding: 16px 0 28px; }
+  .card{ border-radius: 20px; }
+  .formWrap{ padding: 14px; }
+
+  /* tabs más chicos */
+  .tabs{ gap: 6px; margin-bottom: 12px; }
+  .tab{ padding: 9px 12px; font-size: 13.5px; border-radius: 9px; }
+
+  /* TODO el formulario en una sola columna */
+  .form{
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .full{ grid-column: 1 / -1; }
+
+  /* “Nombre de la empresa” arriba y acciones abajo */
+  .row{
+    grid-template-columns: 1fr;
+    gap: 10px;
+    align-items: start;
+  }
+
+  /* botones de acciones que no desborden (se parten en 2 columnas o 1 si no entra) */
+  .actions{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .actionBtn{
+    flex: 1 1 48%;
+    min-width: 150px;
+    justify-content: center;
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 999px;
+  }
+
+  /* etiquetas e inputs algo más compactos */
+  .form label{ font-size: 12.5px; gap: 6px; }
+  .form input,
+  .form textarea{ font-size: 15px; padding: 10px 12px; }
+}
+
+/* iPhone SE (≤400px): botones 100% y submit ancho completo */
+@media (max-width: 400px){
+  .actionBtn{
+    flex-basis: 100%;
+    min-width: 0;
+  }
+  .footer{
+    justify-content: stretch;   /* lleva el submit a la derecha/abajo */
+  }
+  .submit{
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+  }
+}
+
+
+/* Viewport fijo para que no cambie el alto al cambiar de pestaña */
+.forms{
+  position: relative;
+  /* opcional: transición suave si cambia el alto por resize/contenido */
+  transition: height .18s ease;
+}
+
+/* Cada form se comporta como un panel */
+.panel{ position: relative; }
+
+/* El inactivo queda fuera de flujo pero medible */
+.hidden{
+  position: absolute !important;
+  inset: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.show{ position: relative; }
+
+/* opcional: asegurar misma altura de textarea en ambos */
+.textarea{ min-height: 168px; }
+
+/* renombré tu .hidden para el input file para evitar conflicto con .hidden de panel */
+.hiddenInput{ display: none; }

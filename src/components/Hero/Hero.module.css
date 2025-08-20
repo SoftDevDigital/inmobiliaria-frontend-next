@@ -1,0 +1,167 @@
+/* === BASE DESKTOP === */
+.hero{
+  position: relative;
+  isolation: isolate;              /* <- clave: nuevo stacking context */
+  height: clamp(640px, 85vh, 911px);
+  color: #fff;
+  overflow: hidden;
+}
+
+/* Fondo y overlay debajo del contenido */
+.hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:url('/construccion.jpeg');
+  background-size:cover;
+  background-position:center;
+  z-index: 0;                      /* <- debajo */
+}
+.backdrop{
+  position:absolute;
+  inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.6) 100%);
+  z-index: 0;                      /* <- debajo */
+}
+
+/* Contenido SIEMPRE por encima */
+.content{
+  position: relative;              /* <- no absolute por defecto */
+  z-index: 2;                      /* <- arriba del overlay */
+  left: 151px;
+  top: clamp(96px, 18vh, 180px);
+}
+.title{
+  margin:0;
+  width:811px; max-width:811px;
+  font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  font-weight:700; font-size:64px; line-height:1;
+}
+.subtitle{
+  margin:32px 0 0 0;
+  width:870px; max-width:870px;
+  font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  font-weight:600; font-size:24px; line-height:30px;
+}
+
+/* Laptops / tablets anchos */
+@media (max-width:1200px){
+  .hero{ height:70vh; }
+  .content{ left:24px; top:120px; }
+  .title{ width:auto; max-width:90%; font-size:clamp(32px,5vw,48px); }
+  .subtitle{ width:min(90%,700px); margin-top:20px; font-size:clamp(14px,2vw,18px); line-height:1.5; }
+}
+
+/* ====== MOBILE GENERAL (≤768px) ====== */
+@media (max-width:768px){
+  .hero{
+    --header-h: 72px; /* cambialo si tu navbar mide distinto */
+    height: 92vh;
+    padding: calc(env(safe-area-inset-top,0px) + var(--header-h) + 8px) 16px 24px;
+  }
+
+  .content{
+    position: relative;     /* <- mantiene z-index efectivo */
+    z-index: 2;
+    left: 0;                /* resetea offsets de desktop */
+    top: 0;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .title{
+    width:auto; max-width:none;
+    font-size: clamp(28px, 8.5vw, 40px);
+    line-height: 1.08;
+    margin:0;
+    text-wrap: balance;
+  }
+
+  .subtitle{
+    margin-top: 12px;
+    width:auto; max-width:none;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .hero::before{ background-position: 42% 30%; }
+}
+
+/* iPhone 12/14 (390–430px) – fino */
+@media (min-width:376px) and (max-width:430px){
+  .hero{ padding-left: 16px; padding-right: 16px; }
+  .title{ font-size: clamp(30px, 9vw, 38px); }
+}
+
+/* iPhone SE (≤375px) – compacto */
+@media (max-width:375px){
+  .hero{
+    height: 90vh;
+    padding: calc(env(safe-area-inset-top,0px) + var(--header-h) + 6px) 12px 20px;
+  }
+  .title{ font-size: clamp(26px, 9.5vw, 34px); line-height: 1.1; }
+  .subtitle{ font-size: 15px; line-height: 22px; margin-top: 10px; }
+  .hero::before{ background-position: 45% 28%; }
+}
+
+
+/* ====== MOBILE GENERAL (≤768px) ====== */
+@media (max-width:768px){
+  .hero{
+    --header-h: 72px; /* ajustá si tu navbar mide distinto */
+    /* antes: height: 92vh; */
+    height: auto; 
+    min-height: calc(100dvh - var(--header-h)); /* llena 1er viewport sin sobrar */
+    padding: calc(env(safe-area-inset-top,0px) + var(--header-h) + 8px) 16px 20px;
+  }
+
+  .content{
+    position: relative;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .title{
+    width:auto; max-width:none;
+    font-size: clamp(28px, 8.5vw, 40px);
+    line-height: 1.08;
+    margin:0;
+    text-wrap: balance;
+  }
+
+  .subtitle{
+    margin-top: 12px;
+    width:auto; max-width:none;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .hero::before{ background-position: 42% 30%; }
+}
+
+/* iPhone 12/14 (390–430px) – quita aún más el sobrante */
+@media (min-width:376px) and (max-width:430px){
+  .hero{
+    /* en estos tamaños el texto entra cómodo, bajamos el mínimo */
+    min-height: calc(78dvh - var(--header-h));
+    padding-left: 16px; 
+    padding-right: 16px;
+  }
+  .title{ font-size: clamp(30px, 9vw, 38px); }
+}
+
+/* iPhone SE (≤375px) – lo dejás como estaba porque ya se ve bien */
+@media (max-width:375px){
+  .hero{
+    /* antes: height: 90vh;  -> pasamos a auto + min-height */
+    height: auto;
+    min-height: calc(92dvh - var(--header-h));
+    padding: calc(env(safe-area-inset-top,0px) + var(--header-h) + 6px) 12px 20px;
+  }
+  .title{ font-size: clamp(26px, 9.5vw, 34px); line-height: 1.1; }
+  .subtitle{ font-size: 15px; line-height: 22px; margin-top: 10px; }
+  .hero::before{ background-position: 45% 28%; }
+}
