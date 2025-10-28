@@ -25,7 +25,7 @@ const steps = [
       />
     ),
     title: 'Paso 2:',
-    text: 'Llena el formulario y cuéntanos sobre ti',
+    text: 'Llena el formulario y cuéntanos sobre\u00A0ti',
   },
 
   {

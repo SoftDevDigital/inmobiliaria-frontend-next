@@ -1,7 +1,8 @@
-.section {
+.section{
   padding: clamp(24px, 4vw, 64px) 0;
+  margin-top: clamp(28px, 6vw, 110px);   /* ↑ separa del slider de arriba */
+  scroll-margin-top: 96px;               /* por si lo navegás con #formulario */
 }
-
 /* Contenedor principal */
 .card {
   max-width: 1200px;
@@ -335,3 +336,36 @@
 
 /* renombré tu .hidden para el input file para evitar conflicto con .hidden de panel */
 .hiddenInput{ display: none; }
+
+/* ===== Alineación perfecta del icono "Agrega una foto" ===== */
+/* 1) Normalizamos el botón */
+.actionBtn{
+  line-height: 1;                /* evita desfases por la línea del texto */
+  align-items: center;           /* ya lo tenías, refuerzo */
+}
+
+/* 2) Reemplazamos el emoji por un SVG consistente */
+.actionBtn span[aria-hidden]{
+  position: relative;
+  display: inline-block;
+  width: 1.25em;                 /* tamaño visual del icono */
+  height: 1.25em;
+  font-size: 0;                  /* oculta el emoji 📷 */
+  vertical-align: middle;        /* alinea con el texto */
+}
+
+/* 3) Dibujamos el icono dentro del span, centrado */
+.actionBtn span[aria-hidden]::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  display: block;
+
+  /* Usamos máscara SVG para que herede el color del texto (blanco) */
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'><path d='M20 5h-3.2l-1.2-1.5H8.4L7.2 5H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm-8 13a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 .001 6.001A3 3 0 0 0 12 10z'/></svg>") center / contain no-repeat;
+          mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'><path d='M20 5h-3.2l-1.2-1.5H8.4L7.2 5H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm-8 13a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 .001 6.001A3 3 0 0 0 12 10z'/></svg>") center / contain no-repeat;
+}
+
+/* 4) Si en algún equipo lo ves 1px alto/bajo, ajustá aquí: */
+/* .actionBtn span[aria-hidden]{ transform: translateY(1px); } */

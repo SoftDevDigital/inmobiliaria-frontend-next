@@ -77,7 +77,7 @@
 .card{
   position: absolute;
   border-radius: 40px;
-  overflow: hidden;
+  overflow: hidden;       /* ⬅️ importante para recortar el exceso */
   background: #111;
   box-shadow: 0 18px 32px rgba(0,0,0,.35);
 }
@@ -108,9 +108,10 @@
 .logoImg{
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  background: #111;
+  object-fit: cover;      /* ⬅️ antes: contain */
+  object-position: center;
   display: block;
+  background: transparent;
 }
 
 .arrow{
@@ -739,4 +740,735 @@
 /* Micro-ajuste óptico: acercar SOLO la flecha derecha si aún la ves lejos */
 @media (max-width: 430px){
   .tabs .chevBtn:last-child{ margin-left: -6px; } /* prueba -4/-8 según gusto */
+}
+
+/* Carril central: solo el título, centrado */
+.track{
+  display: grid;
+  grid-template-columns: 1fr;   /* solo una columna */
+  justify-items: center;        /* centra el botón/título */
+  min-width: 0;
+}
+
+/* Por si quedó en el archivo, nos aseguramos de ocultarlo en todo lado */
+.sideBtn{ display: none !important; }
+
+
+
+
+/* Header sin grid: el título se centra en la página */
+.head{
+  position: relative;
+  z-index: 2;
+  display: block;                  /* ← quita el grid anterior */
+  padding-inline: var(--page-pad);
+  margin-bottom: var(--gap-top);
+}
+
+/* Ícono de menú “flotando” y alineado al padding de página */
+.menuBtn{
+  position: absolute;
+  left: var(--page-pad);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Tabs = 3 columnas fijas [flecha][título][flecha] centradas */
+.tabs{
+  --chev: 46px;
+  --track: clamp(240px, 26vw, 520px);  /* ancho del carril del título */
+  display: grid;
+  grid-template-columns: var(--chev) var(--track) var(--chev);
+  align-items: center;
+  justify-content: center;             /* centra el conjunto */
+  column-gap: 12px;
+  margin: 0 auto;
+}
+
+.chevBtn{
+  width: var(--chev);
+  height: var(--chev);
+  background: transparent;
+  border: 0;
+  color: #000;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.tabBtn{
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 0 6px;
+  cursor: pointer;
+  color: #000;
+  font-family: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1;
+  text-align: center;
+}
+
+.tabLabel{
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* -------- Responsivo -------- */
+@media (max-width: 900px){
+  .head{ padding-inline: 24px; }
+  .menuBtn{ position: static; transform: none; }
+  .tabs{
+    --chev: 40px;
+    grid-template-columns: var(--chev) 1fr var(--chev);
+  }
+  .tabBtn{ font-size: 28px; }
+}
+
+@media (max-width: 430px){
+  .tabs{ --chev: 36px; }
+  .tabBtn{ font-size: 20px; }
+  .tabLabel{
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;   /* si el nombre es largo */
+  }
+}
+
+
+/* ===== Overrides: textos más chicos en la sección “Industrias/Alianzas” ===== */
+
+/* Título central entre flechas */
+.tabs .tabBtn{
+  /* antes 48px fijo: ahora fluido y más chico en desktop */
+  font-size: clamp(24px, 2.4vw, 34px);
+}
+@media (max-width: 900px){
+  .tabs .tabBtn{ font-size: 22px; }   /* antes 28px */
+}
+@media (max-width: 430px){
+  .tabs .tabBtn{ font-size: 18px; }   /* antes 20px */
+}
+@media (max-width: 375px){
+  .tabs .tabBtn{ font-size: 16px; }   /* antes 17px */
+}
+
+/* “Chips” laterales (si están visibles en tu variante de estilos) */
+.sideBtn{ font-size: 18px; }          /* antes 22px */
+@media (max-width: 900px){
+  .sideBtn{ font-size: 16px; }        /* antes 18px */
+}
+
+/* Ítems del panel de categorías (drawer/popover) */
+.menuItem{ font-size: 16px; }         /* antes 18px */
+
+/* Ajuste del carril para que no se corte el texto al achicar la fuente */
+.tabs{
+  --track: clamp(200px, 22vw, 420px); /* antes valores más grandes */
+}
+@media (max-width: 900px){
+  .tabs{ --track: clamp(160px, 54vw, 280px); }
+}
+@media (max-width: 430px){
+  .tabs{ --track: clamp(140px, 56vw, 240px); }
+}
+
+
+/* === Alinear el menú hamburguesa con el logo del header === */
+/* Usamos la misma “sangría” (left padding) que tu Navbar */
+.section{
+  --page-pad: 151px;   /* = padding-left del Navbar en desktop (ajusta si cambias allá) */
+}
+
+/* Mantener sincronizado con tus breakpoints del Navbar */
+@media (max-width: 1280px){ .section{ --page-pad: 80px; } }
+@media (max-width: 900px) { .section{ --page-pad: 24px; } }
+@media (max-width: 430px) { .section{ --page-pad: 16px; } }
+
+/* Aplicar el mismo padding a la cabecera blanca de la sección */
+.head{
+  padding-left: var(--page-pad) !important;
+  padding-right: var(--page-pad) !important;
+  position: relative; /* referencia para .menuBtn */
+}
+
+/* Colocar la hamburguesa justo debajo del logo (mismo eje X) */
+.menuBtn{
+  position: absolute;
+  left: var(--page-pad);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* En mobile la dejamos en flujo normal, como ya hacías */
+@media (max-width: 900px){
+  .menuBtn{ position: static; transform: none; }
+}
+
+
+/* ====== Shrink suave de la sección (≈8–12%) ====== */
+/* Desktop */
+.section{
+  /* antes: 48px 0 96px */
+  padding: 40px 0 84px;
+
+  /* antes:
+     --stage-w: clamp(640px, 44vw, 850px);
+     --stage-h: clamp(340px, 23vw, 452px);
+     --card-w/h: clamp(300px, 28vw, 420px);
+     --card-h-side: clamp(210px, 20vw, 300px);
+     --arrow-gap: clamp(12px, 2vw, 40px);
+     --card-offset: clamp(16px, 2.2vw, 32px);
+  */
+  --stage-w: clamp(600px, 40vw, 800px);
+  --stage-h: clamp(320px, 21vw, 420px);
+
+  --card-w:  clamp(280px, 25vw, 380px);
+  --card-h:  clamp(280px, 25vw, 380px);
+  --card-h-side: clamp(192px, 18vw, 276px);
+
+  --arrow-gap: clamp(10px, 1.8vw, 32px);
+  --card-offset: clamp(12px, 1.8vw, 24px);
+}
+
+/* Flechas un poquito más chicas */
+.arrow{ width: 50px; height: 50px; }          /* antes 56 */
+.arrow svg{ width: 24px; height: 24px; }      /* antes 28 */
+
+/* ---------- Tablet (≤900px) ---------- */
+@media (max-width: 900px){
+  .section{
+    /* antes:
+       --stage-w: min(92vw, 850px);
+       --stage-h: min(60vw, 452px);
+       --card-w/h: min(48vw, 420px);
+       --card-h-side: min(28vw, 300px);
+    */
+    --stage-w: min(88vw, 800px);
+    --stage-h: min(56vw, 420px);
+    --card-w:  min(44vw, 380px);
+    --card-h:  min(44vw, 380px);
+    --card-h-side: min(26vw, 276px);
+  }
+  .arrow{ width: 46px; height: 46px; }
+  .arrow svg{ width: 22px; height: 22px; }
+}
+
+/* ---------- Mobile (≤430px) ---------- */
+@media (max-width: 430px){
+  .section{
+    /* antes: 88vw / 66vw / 42vw */
+    --stage-w: 86vw;
+    --card-w: 62vw;
+    --card-h: 62vw;
+    --card-h-side: 40vw;
+  }
+  .arrow{ width: 40px; height: 40px; }  /* antes 42–44 */
+  .arrow svg{ width: 18px; height: 18px; }
+}
+
+/* ---------- iPhone SE (≤375px) ---------- */
+@media (max-width: 375px){
+  .section{
+    /* antes: 92vw / 72vw / 48vw */
+    --stage-w: 90vw;
+    --card-w: 68vw;
+    --card-h: 68vw;
+    --card-h-side: 46vw;
+  }
+  .arrow{ width: 36px; height: 36px; }
+  .arrow svg{ width: 16px; height: 16px; }
+}
+
+/* Barra de título solo para mobile/tablet */
+.mobileHeading{
+  display: none;                  /* oculto en desktop */
+  align-items: center;
+  gap: 10px;
+}
+
+/* Título “ALIANZAS” */
+.sectionTitle{
+  margin: 0;
+  flex: 1;                        /* empuja para que quede centrado */
+  text-align: center;
+  font: 700 clamp(18px, 5.2vw, 24px)/1.1 "IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  letter-spacing: .02em;
+  color: #111;
+}
+
+/* Mostrar en ≤900px y separar del carrusel de rubros */
+@media (max-width: 900px){
+  .mobileHeading{ display: flex; }
+  .tabs{ margin-top: 6px; }
+}
+
+
+/* Visibilidad de los dos botones de menú */
+.desktopOnly { display: grid; }   /* se ve en desktop */
+.mobileOnly  { display: none; }   /* oculto por defecto */
+
+/* En ≤900px solo se ve el de la barra "Alianzas" */
+@media (max-width: 900px){
+  .desktopOnly { display: none !important; }  /* oculta el que está alineado al logo */
+  .mobileOnly  { display: grid !important; }  /* muestra el de "Alianzas" */
+}
+
+/* ======== MOBILE: barra hamburguesa + título (como la 1º foto) ======== */
+@media (max-width: 900px){
+  /* La cabecera de la sección apila: [barra superior] arriba y [tabs] abajo */
+  .head{
+    display: grid;
+    row-gap: 8px;                 /* separación entre barra y tabs */
+    padding-left: 16px;           /* mismo “aire” que la 1º foto */
+    padding-right: 16px;
+    margin-bottom: 18px;          /* baja un poco el carrusel */
+  }
+
+  /* Barra superior: [hamburguesa][ALIANZAS centrado] */
+  .mobileHeading{
+    display: grid !important;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 10px;
+    min-height: 44px;             /* altura cómoda de la barra */
+  }
+
+  /* ÚNICO botón visible en mobile */
+  .desktopOnly{ display: none !important; }
+  .mobileOnly{ display: grid !important; }
+
+  /* Iconito con hit area cómoda */
+  .mobileHeading .menuBtn{
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+  }
+
+  /* “ALIANZAS” como en la 1º foto (mayúsculas, peso y tracking) */
+  .sectionTitle{
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    font-weight: 800;
+    font-size: clamp(20px, 5.6vw, 26px);
+    text-align: center;
+    margin: 0;
+  }
+
+  /* Debajo va la fila de categoría centrada con flechas a los lados */
+  .tabs{
+    /* 3 columnas fijas: [‹][texto][›] centradas en la página */
+    --chev: 36px;
+    display: grid !important;
+    grid-template-columns: var(--chev) 1fr var(--chev);
+    align-items: center;
+    justify-content: center;
+    column-gap: 12px;
+    margin: 0 auto;
+    overflow: visible; /* sin scroll en esta fila */
+  }
+
+  .chevBtn{
+    width: var(--chev);
+    height: var(--chev);
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #000;
+  }
+
+  .tabBtn{
+    width: 100%;
+    padding: 0 6px;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 20px;   /* “Constructora” del tamaño de la 1º foto */
+    line-height: 1.1;
+    color: #111;
+  }
+
+  .tabLabel{
+    display: block;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* iPhone 14/15 (≤430px): micro‑ajuste de tamaños */
+@media (max-width: 430px){
+  .tabs{ --chev: 34px; column-gap: 10px; }
+  .tabBtn{ font-size: 18px; }
+}
+
+/* iPhone SE (≤375px) */
+@media (max-width: 375px){
+  .tabs{ --chev: 32px; column-gap: 8px; }
+  .tabBtn{ font-size: 17px; }
+}
+
+
+/* ===== FIX: mobile igual al modelo ===== */
+@media (max-width: 900px){
+
+  /* 1) La cabecera tiene 2 filas: [barra título] y [fila categoría] */
+  .head{
+    display: grid !important;
+    grid-template-rows: auto auto;
+    row-gap: 10px;                     /* separación visible entre filas */
+    padding-left: 18px !important;
+    padding-right: 16px !important;
+    margin-bottom: 16px;               /* baja el carrusel */
+  }
+
+  /* 2) Barra superior: hamburguesa + ALIANZAS centrado */
+  .mobileHeading{
+    display: grid !important;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 12px;
+    min-height: 44px;
+  }
+  /* solo un ícono en mobile */
+  .desktopOnly{ display: none !important; }
+  .mobileOnly{ display: grid !important; }
+
+  .mobileHeading .menuBtn{
+    width: 44px; height: 44px; display: grid; place-items: center;
+  }
+  .sectionTitle{
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    font-weight: 800;
+    font-size: clamp(20px, 5.4vw, 26px);
+    text-align: center;
+  }
+
+  /* 3) La fila de categoría va ABAJO, centrada entre flechas */
+  .tabs{
+    display: grid !important;
+    grid-template-columns: 36px 1fr 36px;     /* [‹] [texto] [›] */
+    align-items: center;
+    justify-content: center;
+    column-gap: 12px;
+    margin: 0 auto !important;
+
+    /* matar cualquier flex/scroll heredado */
+    overflow: visible !important;
+    flex-wrap: nowrap !important;
+    gap: 0 !important;
+  }
+  .chevBtn{
+    width: 36px; height: 36px;
+    display: grid; place-items: center;
+    background: transparent; border: 0; padding: 0;
+  }
+  .tabBtn{
+    width: 100%;
+    background: transparent; border: 0; padding: 0 6px;
+    font-weight: 700; font-size: 18px; line-height: 1.1; color: #111;
+  }
+  .tabLabel{
+    display: block; text-align: center;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+}
+
+/* Micro‑ajustes por breakpoint chico */
+@media (max-width: 430px){
+  .tabs{ grid-template-columns: 34px 1fr 34px; column-gap: 10px; }
+  .tabBtn{ font-size: 17px; }
+}
+@media (max-width: 375px){
+  .tabs{ grid-template-columns: 32px 1fr 32px; column-gap: 8px; }
+  .tabBtn{ font-size: 16px; }
+}
+
+
+/* === OVERRIDE FINAL: mobile como el modelo === */
+@media (max-width: 900px){
+  /* 1) La cabecera apila: [barra título] arriba y [fila categoría] abajo */
+  .head{
+    display: grid !important;
+    grid-template-columns: 1fr !important;   /* quita las 2 columnas previas */
+    grid-auto-flow: row !important;          /* obliga apilado en filas */
+    row-gap: 10px;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    margin-bottom: 16px !important;
+  }
+
+  /* 2) Solo un ícono: el de la barra de “ALIANZAS” */
+  .desktopOnly{ display: none !important; }
+  .mobileOnly { display: grid !important; }
+
+  /* Barra superior: [☰][ALIANZAS centrado] */
+  .mobileHeading{
+    display: grid !important;
+    grid-template-columns: auto 1fr !important;
+     margin-left: -5px;
+    align-items: center;
+    column-gap: 12px;
+    min-height: 44px;
+  }
+  .mobileHeading .menuBtn{ width: 44px; height: 44px; }
+  .sectionTitle{
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    font-weight: 800;
+    font-size: clamp(20px, 5.4vw, 26px);
+    text-align: center;
+    margin-right: 47px;
+  }
+
+  /* 3) Debajo: fila de categoría centrada entre flechas */
+  .tabs{
+    display: grid !important;
+    grid-template-columns: 36px 1fr 36px !important; /* [‹] [texto] [›] */
+    align-items: center;
+    justify-content: center;
+    column-gap: 12px;
+    margin: 19px auto !important;
+
+    /* anula flex/scroll heredado */
+    overflow: visible !important;
+    flex-wrap: nowrap !important;
+    gap: 0 !important;
+  }
+  .chevBtn{ width: 36px; height: 36px; display: grid; place-items: center; }
+  .tabBtn{ width: 100%; padding: 0 6px; background: transparent; border: 0; font-weight: 700; font-size: 18px; line-height: 1.1; }
+  .tabLabel{ display: block; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+
+/* Micro‑ajustes */
+@media (max-width: 430px){
+  .tabs{ grid-template-columns: 34px 1fr 34px !important; column-gap: 10px; }
+  .tabBtn{ font-size: 17px; }
+}
+@media (max-width: 375px){
+  .tabs{ grid-template-columns: 32px 1fr 32px !important; column-gap: 8px; }
+  .tabBtn{ font-size: 16px; }
+}
+
+
+/* === FIX: flechas quietas en MOBILE (≤900px) === */
+@media (max-width: 900px){
+  .tabs{
+    /* tamaños fijos para flechas y carril central */
+    --chev: 36px;
+    --track: clamp(150px, 60vw, 260px);
+
+    display: grid !important;
+    grid-template-columns: var(--chev) var(--track) var(--chev) !important;
+    align-items: center;
+    justify-content: center;
+    column-gap: 10px;
+    margin: 0 auto !important;
+
+    /* anulamos herencias que provocaban el “salto” */
+    overflow: visible !important;
+    flex-wrap: nowrap !important;
+    gap: 0 !important;
+  }
+
+  .chevBtn{
+    width: var(--chev) !important;
+    height: var(--chev) !important;
+    flex: 0 0 var(--chev) !important;
+    padding: 0; border: 0; background: transparent;
+    display: grid; place-items: center;
+  }
+  .chevBtn svg{ width: 70%; height: 70%; display:block; }
+
+  .tabBtn{
+    width: var(--track) !important;
+    max-width: var(--track) !important;
+    padding: 0 4px !important;
+    background: transparent; border: 0;
+    font-weight: 700; font-size: 18px; line-height: 1.1; /* ajusta si querés */
+    color: #111;
+  }
+
+  /* el texto puede ocupar 1–2 líneas, pero sin cambiar el ancho del carril */
+  .tabLabel{
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;  /* hasta 2 líneas */
+  }
+}
+
+/* micro-ajustes por tamaños chicos */
+@media (max-width: 430px){
+  .tabs{ --chev: 34px; column-gap: 8px; }
+  .tabBtn{ font-size: 17px; }
+}
+@media (max-width: 375px){
+  .tabs{ --chev: 32px; column-gap: 6px; }
+  .tabBtn{ font-size: 16px; }
+}
+
+/* --- Drawer por encima del header y con scroll propio --- */
+.menuOverlay{
+  z-index: 10000;                 /* antes 40 */
+  touch-action: none;             /* evita scroll del body al tocar el overlay */
+}
+.menuPanel{
+  z-index: 10001;                 /* antes 41 */
+  top: 0px;
+  height: 100dvh;                 /* mejor que 100vh en iOS */
+  overflow: auto;                 /* <- scroll sólo del panel */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;   /* no “arrastra” el body al llegar al borde */
+
+  /* que no se coma la primera/última opción por notch o barra */
+  padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+}
+
+/* --- Drawer por encima del header y con scroll propio --- */
+/* MOBILE/TABLET (≤959px): el panel es un drawer a pantalla completa */
+@media (max-width: 959px){
+  .menuPanel{
+    z-index: 10001;
+    top: 0 !important;
+    left: 0;
+    height: 100dvh;
+    width: 320px;
+    max-width: 86vw;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 16px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+    transform: translateX(-100%);
+  }
+  .menuPanel[data-open="true"]{ transform: translateX(0); }
+}
+
+/* DESKTOP (≥960px): popover debajo del header */
+@media (min-width: 960px){
+  .menuPanel{
+    z-index: 10001;
+    height: auto;
+    max-height: 70vh;
+    width: 260px;
+    /* ajustá esta cifra si tu header es más alto/bajo */
+    top: 110px !important;     /* antes 96; subilo o bajalo a gusto */
+    left: var(--page-pad);      /* alineado con .head */
+    border-radius: 12px;
+    overflow: auto;
+
+    /* cerrado por defecto */
+    transform: translateY(-8px) scale(.98);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .menuPanel[data-open="true"]{
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* ======== COMPACT HEADER + MENOS AIRE (desktop y mobile) ======== */
+.section.compact{
+  /* menos padding general de la sección */
+  padding: 28px 0 64px;
+  /* acercar header al carrusel */
+  --gap-top: clamp(20px, 3.4vw, 36px);
+  /* bajar un poco el “techo” del card central */
+  --card-offset: clamp(6px, 1.2vw, 14px);
+}
+
+/* header con menos margen inferior */
+.section.compact .head{
+  margin-bottom: var(--gap-top) !important;
+}
+
+/* título entre flechas un poco más chico en desktop */
+.section.compact .tabs .tabBtn{
+  font-size: clamp(20px, 2.1vw, 28px);
+}
+
+/* flechas y carril del título levemente más chicos */
+.section.compact .tabs{
+  --chev: 40px;
+  --track: clamp(180px, 22vw, 380px);
+  column-gap: 10px;
+}
+
+/* tarjetas: leve reducción del alto del “stage” para compactar más */
+@media (min-width: 901px){
+  .section.compact{
+    --stage-w: clamp(600px, 40vw, 800px);
+    --stage-h: clamp(300px, 20vw, 396px);
+    --card-w:  clamp(270px, 24vw, 360px);
+    --card-h:  clamp(270px, 24vw, 360px);
+    --card-h-side: clamp(182px, 17vw, 260px);
+  }
+  .section.compact .arrow{ width: 46px; height: 46px; }
+  .section.compact .arrow svg{ width: 22px; height: 22px; }
+}
+
+/* mobile/tablet: todavía más cerca */
+@media (max-width: 900px){
+  .section.compact{
+    padding: 22px 0 56px;
+    --stage-w: min(86vw, 780px);
+    --stage-h: min(52vw, 380px);
+    --card-w:  min(42vw, 360px);
+    --card-h:  min(42vw, 360px);
+    --card-h-side: min(24vw, 240px);
+    --card-offset: 8px;
+  }
+  .section.compact .head{ margin-bottom: 12px !important; }
+  .section.compact .tabs{ --chev: 34px; }
+  .section.compact .tabBtn{ font-size: 17px; }
+}
+/* ============ Industries.module.css ============ */
+
+/* (todo tu CSS original tal cual lo pasaste) */
+/* … [NO TOCO NADA DE LO EXISTENTE] … */
+
+/* ================== AÑADIDO AL FINAL ================== */
+/* Forzar que el título de la categoría NO se corte con “…” también en desktop.
+   Permitimos hasta 2 líneas en cualquier ancho para evitar el truncado. */
+.tabs .tabBtn .tabLabel{
+  white-space: normal;           /* deja de ser una sola línea */
+  overflow: visible;             /* no ocultar contenido */
+  text-overflow: initial;        /* sin “…” */
+  display: -webkit-box;          /* permite clamping */
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;         /* hasta 2 líneas si es necesario */
+  line-clamp: 2;
+}
+.logoImg{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      /* por defecto, llena el card */
+  object-position: center;
+  display: block;
+  background: transparent;
+}
+
+/* Para logos tipo faja (no recortar) */
+.logoContain{
+  object-fit: contain;    /* muestra el logo completo */
+  background: #111;       /* mismo fondo del card; cambialo a #fff si preferís */
 }

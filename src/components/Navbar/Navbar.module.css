@@ -232,3 +232,161 @@
   z-index: 1;                      /* por encima del scrim */
 }
 .mobile.open .mobileInner{ transform: translateX(0); }
+
+/* Header SIEMPRE fijo */
+.header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: #000;
+  color: #fff;
+  /* mejora de rendimiento */
+  will-change: transform;
+}
+
+/* separador con la altura del header */
+.spacer{
+  height: 173px;          /* igual que el min-height de .frame en desktop */
+}
+
+/* Ajusta el alto del spacer en tus breakpoints */
+@media (max-width: 900px){
+  .spacer{ height: 72px; }  /* aprox: padding + logo en móvil */
+}
+@media (max-width: 430px){
+  .spacer{ height: 60px; }
+}
+
+
+/* ===== Ajustes de tamaños (sobrescribe) ===== */
+
+/* Logo más chico en desktop */
+.brandImg{
+  height: 42px;          /* antes 55px */
+  width: auto;
+  display: block;
+}
+
+/* Texto del menú desktop más chico */
+.nav{
+  gap: 72px;             /* antes 120px (opcional, un poco menos de separación) */
+  top: 10px;             /* bajamos un toque el offset vertical */
+}
+.nav a{
+  font-size: 18px;       /* antes 20px */
+  line-height: 24px;
+}
+
+/* (Opcional) más compacto aún en pantallas muy anchas */
+@media (min-width: 1440px){
+  .brandImg{ height: 38px; }
+  .nav a{ font-size: 17px; }
+}
+
+/* NOTA:
+   No cambié la altura del header ni el spacer.
+   Si querés que todo el header sea más bajito, bajá también:
+   .frame { padding-top: 40px; padding-bottom: 28px; min-height: 136px; }
+   .spacer { height: 136px; }
+*/
+
+/* ==== NAVBAR MÁS BAJA (solo desktop ≥901px) ==== */
+@media (min-width: 901px){
+  .frame{
+    /* antes: pt:54px, pb:40px, min-height:173px */
+           padding-top: 22px;
+        padding-bottom: 23px;
+    min-height: 0;            /* quitamos el mínimo */
+    align-items: center;      /* centra verticalmente logo + nav */
+  }
+
+  /* logo un poco más chico (opcional) */
+  .brandImg{ height: 34px; }  /* antes 42px/55px */
+
+  /* el nav ya no necesita “top” para bajar */
+  .nav{ top: 0; }
+
+  /* el separador debe igualar la nueva altura real del header:
+     12 + 34 + 12 = 58px */
+  .spacer{ height: 58px; }    /* antes 173px */
+}
+
+/* Mostrar/ocultar por breakpoint */
+.brandImgDesktop { display: block; }
+.brandImgMobile  { display: none; }
+
+@media (max-width: 900px){
+  .brandImgDesktop { display: none; }
+  .brandImgMobile  { display: block; }
+}
+
+/* Reutiliza los tamaños que ya tenías en mobile */
+@media (max-width: 900px){
+  .brandImgMobile { height: 40px; }
+}
+@media (max-width: 680px){
+  .brandImgMobile { height: 32px; }
+}
+@media (max-width: 430px){
+  .brandImgMobile { height: 60px;}
+}
+@media (max-width: 360px){
+  .brandImgMobile { height: 24px; }
+}
+
+
+@media (max-width: 900px){
+  /* barra negra fija, compacta */
+  .header{
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #000;
+    z-index: 1000;
+  }
+
+  .frame{
+    grid-template-columns: auto 1fr auto; /* [logo] [espacio] [hamb] */
+    align-items: center;
+    min-height: 0;
+    /* alto visual ≈ 60px (safe-area incluido) */
+    padding-top: calc(12px + env(safe-area-inset-top));
+    padding-bottom: 12px;
+    padding-left: 16px;
+    padding-right: 12px;
+  }
+
+  /* ocultamos el nav de desktop */
+  .nav{ display: none !important; }
+
+  /* logo mobile: wordmark largo, no el ícono */
+  .brandImgMobile{
+    display: block !important;
+    height: 28px;         /* se ve como la foto */
+    width: auto;          /* mantiene proporción */
+  }
+
+  /* hamburguesa a la derecha, tamaño cómodo */
+  .burger{
+    display: inline-flex;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+  }
+  .burger svg{
+    width: 24px;
+    height: 24px;
+    stroke: #fff;
+  }
+
+  /* el separador debe igualar la altura real del header */
+  .spacer{ height: 60px; } /* ~12 + 28 + 12 */
+}
+
+/* iPhone 14/15 (≤430px): micro-ajuste si lo ves un pelín alto */
+@media (max-width: 430px){
+  .brandImgMobile{ height: 26px; }
+  .spacer{ height: 56px; } /* 12 + 26 + 12 + safe-area típico */
+}

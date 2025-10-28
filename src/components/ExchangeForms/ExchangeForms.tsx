@@ -13,17 +13,49 @@ export default function ExchangeForms() {
   const fileRef = useRef<HTMLInputElement>(null);
   const [photoName, setPhotoName] = useState('');
   const [coords, setCoords] = useState('');
+  const [locLoading, setLocLoading] = useState(false);
 
   const handlePhoto = () => fileRef.current?.click();
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPhotoName(e.target.files?.[0]?.name ?? '');
   };
-  const locate = () => {
-    if (!('geolocation' in navigator)) return alert('Tu navegador no soporta geolocalización');
-    navigator.geolocation.getCurrentPosition(
-      p => setCoords(`${p.coords.latitude.toFixed(5)}, ${p.coords.longitude.toFixed(5)}`),
-      () => alert('No pudimos obtener tu ubicación')
-    );
+
+  // ✅ Geolocalización con permisos + timeout + fallback manual
+  const locate = async () => {
+    if (!('geolocation' in navigator)) {
+      alert('Tu navegador no soporta geolocalización');
+      return;
+    }
+    try {
+      setLocLoading(true);
+
+      // Aviso: geolocalización solo funciona en HTTPS o localhost.
+      // Intentamos chequear permisos si el navegador lo soporta.
+   
+      const hasPerms = typeof navigator.permissions?.query === 'function';
+     
+      const perm: PermissionStatus | null = hasPerms ? await navigator.permissions.query({ name: 'geolocation' as PermissionName }) : null;
+
+      if (perm && perm.state === 'denied') {
+        alert('El permiso de ubicación está bloqueado. Habilitalo en los ajustes del navegador y reintentá.');
+        setLocLoading(false);
+        return;
+      }
+
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(
+          resolve,
+          reject,
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+      });
+
+      setCoords(`${position.coords.latitude.toFixed(5)}, ${position.coords.longitude.toFixed(5)}`);
+    } catch (_) {
+      alert('No pudimos obtener tu ubicación. Podés escribirla manualmente en el campo de ubicación.');
+    } finally {
+      setLocLoading(false);
+    }
   };
 
   const onSubmit = (e: React.FormEvent) => {
@@ -53,7 +85,9 @@ export default function ExchangeForms() {
   }, []);
 
   // si cambian datos que pueden alterar la altura, re-medir
-  useEffect(() => { measure(); }, [tab, coords, photoName]); 
+  useEffect(() => { measure(); }, [tab, coords, photoName]);
+
+  const mapsHref = coords ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(coords)}` : '';
 
   return (
     <section className={styles.section} id="formulario">
@@ -125,8 +159,8 @@ export default function ExchangeForms() {
                 </label>
 
                 <div className={styles.actions}>
-                  <button type="button" onClick={locate} className={styles.actionBtn}>
-                    <span aria-hidden>📍</span> Colocar ubicación
+                  <button type="button" onClick={locate} className={styles.actionBtn} disabled={locLoading}>
+                    <span aria-hidden>📍</span> {locLoading ? 'Buscando...' : 'Colocar ubicación'}
                   </button>
                   <button type="button" onClick={handlePhoto} className={styles.actionBtn}>
                     <span aria-hidden>📷</span> Agrega una foto
@@ -140,6 +174,17 @@ export default function ExchangeForms() {
                   />
                 </div>
               </div>
+
+              {/* ⬇️ NUEVO: campo manual para ubicación (también muestra la auto) */}
+              <label>
+                Ubicación (auto o manual)
+                <input
+                  type="text"
+                  placeholder="Ej: -31.4201, -64.1888 o 'Santa Fe, Argentina'"
+                  value={coords}
+                  onChange={(e) => setCoords(e.target.value)}
+                />
+              </label>
 
               <label>
                 Mail
@@ -160,7 +205,18 @@ export default function ExchangeForms() {
               <div className={styles.footer}>
                 {(coords || photoName) && (
                   <p className={styles.meta}>
-                    {coords && `Ubicación: ${coords}`} {coords && photoName && '·'} {photoName && `Foto: ${photoName}`}
+                    {coords && (
+                      <>
+                        Ubicación: {coords}{' '}
+                        {mapsHref && (
+                          <>
+                            · <a href={mapsHref} target="_blank" rel="noopener noreferrer">Ver en Maps</a>
+                          </>
+                        )}
+                      </>
+                    )}
+                    {coords && photoName && ' · '}
+                    {photoName && `Foto: ${photoName}`}
                   </p>
                 )}
                 <button className={styles.submit} type="submit">Enviar</button>

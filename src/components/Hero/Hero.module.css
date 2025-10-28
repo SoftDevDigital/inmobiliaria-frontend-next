@@ -1,4 +1,5 @@
 /* === BASE DESKTOP === */
+
 .hero{
   position: relative;
   isolation: isolate;              /* <- clave: nuevo stacking context */
@@ -164,4 +165,297 @@
   .title{ font-size: clamp(26px, 9.5vw, 34px); line-height: 1.1; }
   .subtitle{ font-size: 15px; line-height: 22px; margin-top: 10px; }
   .hero::before{ background-position: 45% 28%; }
+}
+@media (max-width: 768px){
+  .subtitle{ display: none; }
+}
+
+
+/* ====== MOBILE CROP FINO (deja ver un poquito más de imagen) ====== */
+
+/* Base mobile */
+@media (max-width: 768px){
+  .hero{
+    --header-h: 72px;                                /* alto real de tu navbar */
+    height: auto;                                    /* que lo defina el min-height */
+    min-height: calc(76dvh - var(--header-h));       /* valor base */
+    padding: calc(env(safe-area-inset-top,0px) + var(--header-h) + 6px) 16px 12px;
+  }
+
+  .content{
+    left: 0;
+    top: 0;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .title{
+    font-size: clamp(28px, 7.6vw, 34px);
+    line-height: 1.04;                               /* más compacto */
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .subtitle{ display: none; }
+  .hero::before{ background-position: 48% 36%; }     /* sube un toque el encuadre */
+}
+
+/* iPhone 12/13/14, XR (390–430px) */
+@media (min-width: 376px) and (max-width: 430px){
+  .hero{ min-height: calc(72dvh - var(--header-h)); } /* recorta un poco más */
+}
+
+/* iPhone SE (≤375px) */
+@media (max-width: 375px){
+  .hero{ min-height: calc(78dvh - var(--header-h)); } /* SE necesita un pelín más alto */
+}
+
+/* ====== MOBILE (≤768px) – recorte más agresivo (menos fondo visible) ====== */
+@media (max-width: 768px){
+  .hero{
+    --header-h: 72px;                                   /* alto real del navbar */
+    height: auto;
+    min-height: calc(66dvh - var(--header-h));          /* antes 76dvh */
+    padding: calc(env(safe-area-inset-top,0px) + var(--header-h) + 4px) 16px 10px;
+  }
+
+  .content{
+    left: 0;
+    top: 0;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .title{
+    font-size: clamp(28px, 7.6vw, 34px);
+    line-height: 1.03;                                   /* compacto para que entre */
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .subtitle{ display: none; }
+  .hero::before{ background-position: 50% 40%; }         /* sube apenas el encuadre */
+}
+
+/* iPhone 12/13/14, XR (390–430px) – aún menos fondo */
+@media (min-width: 376px) and (max-width: 430px){
+  .hero{ min-height: calc(60dvh - var(--header-h)); }     /* antes 72dvh */
+}
+
+/* iPhone SE (≤375px) – un poco más alto para que quepa el título */
+@media (max-width: 375px){
+  .hero{ min-height: calc(68dvh - var(--header-h)); }     /* antes 78dvh */
+}
+
+/* ===== Desktop (≥1201px): texto más chico en el hero ===== */
+@media (min-width: 1201px){
+  .title{
+    /* antes 64px fijo */
+    font-size: clamp(44px, 4.6vw, 56px);
+    line-height: 1.04;
+    max-width: 720px;           /* antes 811px: renglones más cortos */
+  }
+
+  .subtitle{
+    /* antes 24px / 30px */
+    font-size: clamp(18px, 1.35vw, 20px);
+    line-height: 1.4;           /* ~28px a 20px */
+    max-width: 760px;           /* antes 870px */
+    margin-top: 18px;           /* un poco menos de aire */
+    font-weight: 500;           /* más liviano queda más prolijo */
+  }
+}
+
+/* (Opcional) Ultra-wide (≥1600px): evitá que crezca demasiado */
+@media (min-width: 1600px){
+  .title{ font-size: 54px; }
+  .subtitle{ font-size: 19px; }
+}
+
+.subtitle{ margin: 32px 0 0 0; max-inline-size: 62ch; /* ancho legible de párrafo */ text-align: justify; /* alinea ambos lados */ hyphens: auto; /* guiona palabras largas (usa lang="es") */ font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif; font-weight: 600; font-size: 24px; line-height: 1.4; /* un toque más de aire */ }
+
+
+/* ===== Desktop: que el hero llene el alto del viewport ===== */
+@media (min-width: 901px){
+  .hero{
+    height: auto !important;   /* anula el clamp(…85vh…) */
+    min-height: 100vh;         /* ocupa todo el alto del viewport */
+  }
+  /* Si el navegador soporta dvh, usa 100dvh para evitar saltos al cambiar la barra del navegador */
+  @supports (height: 1dvh){
+    .hero{ min-height: 100dvh; }
+  }
+}
+
+
+/* ===== Desktop: centrar y bajar un poco el texto del hero ===== */
+@media (min-width: 901px){
+  .hero{
+    /* ya tenés min-height:100vh; lo mantenemos */
+    display: grid;                 /* permite centrar verticalmente el contenido */
+  }
+
+  .content{
+    left: auto;                    /* anula el left:151px del bloque base */
+    top: -47px;              /* anula top: clamp(96px, 18vh, 180px) */
+    margin-left: 151px;            /* conservá el mismo alineado horizontal */
+    align-self: center;            /* centra verticalmente dentro del hero */
+    transform: translateY(4vh);    /* bajalo un toque (ajustá 2–6vh a gusto) */
+  }
+}
+
+/* ===== MOBILE look como la referencia ===== */
+@media (max-width: 768px){
+  .hero{
+    /* el header ya ocupa su lugar, el hero llena el viewport restante */
+    --header-h: 72px;
+    min-height: calc(100dvh - var(--header-h));
+    padding: 0 16px 12px;      /* sin padding arriba; dejamos aire abajo */
+    display: grid;             /* nos permite colocar el contenido abajo */
+    align-items: end;
+  }
+
+  .hero::before{
+    /* subimos encuadre para que el personaje quede más alto */
+    background-position: 50% 36%;
+  }
+
+  .backdrop{
+    /* refuerzo de contraste abajo-izquierda */
+    background: linear-gradient(
+      180deg,
+      rgba(0,0,0,.10) 0%,
+      rgba(0,0,0,.30) 40%,
+      rgba(0,0,0,.65) 100%
+    );
+  }
+
+  .content{
+    left: 0;                   /* anulamos offset de desktop */
+    top: auto;
+    margin: 0;
+    padding-bottom: clamp(16px, 5vh, 56px);  /* separa del borde inferior */
+    max-width: 680px;
+  }
+
+  .title{
+    /* forzamos un ancho legible para que “rompa” parecido a la foto */
+    max-inline-size: 22ch;     /* ajusta entre 20–24ch según gusto */
+    font-size: clamp(32px, 10.5vw, 44px);
+    line-height: 1.02;         /* compacto como en el mock */
+    letter-spacing: -0.2px;
+    margin: 0;
+    text-wrap: balance;        /* envoltura balanceada */
+    text-shadow: 0 2px 8px rgba(0,0,0,.45); /* mejora legibilidad */
+  }
+
+  .subtitle{ display: none; }  /* en mobile oculto */
+}
+
+/* iPhone 14/15 (390–430px) pequeños ajustes ópticos */
+@media (min-width: 376px) and (max-width: 430px){
+  .title{
+    max-inline-size: 21ch;
+    margin-bottom: 57px;
+    font-size: clamp(30px, 10vw, 42px);
+  }
+}
+
+/* iPhone SE (≤375px) – un pelín más estrecho */
+@media (max-width: 375px){
+  .title{
+    max-inline-size: 20ch;
+    font-size: clamp(28px, 10.5vw, 38px);
+  }
+}
+
+/* Flecha scroll-down (oculta por defecto) */
+.down{ display:none; }
+
+/* Mostrar en mobile y colocar centrada abajo */
+@media (max-width: 768px){
+  .down{
+    position: absolute;
+    left: 50%;
+    bottom: clamp(10px, 3.8vh, 24px);
+    transform: translateX(-50%);
+    z-index: 2;                 /* por encima del overlay */
+    width: 44px; height: 44px;  /* target accesible */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    opacity: .95;
+  }
+  .down svg{
+    width: 28px; height: 28px;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,.45));
+    transition: transform .2s ease, opacity .2s ease;
+  }
+  .down:hover svg{ transform: translateY(2px); opacity: 1; }
+}
+
+/* Evitar animaciones si el usuario lo pide */
+@media (prefers-reduced-motion: reduce){
+  .down svg{ transition: none; }
+}
+
+
+/* Flecha un poco más grande en mobile */
+@media (max-width: 768px){
+  .down{
+    width: 56px;              /* antes 44px */
+    height: 56px;             /* antes 44px */
+    bottom: clamp(8px, 3.2vh, 20px);
+  }
+  .down svg{
+    width: 34px;              /* antes 28px */
+    height: 34px;             /* antes 28px */
+  }
+  /* engrosa el trazo del chevron */
+  .down svg path{
+    stroke-width: 3.5;
+  }
+}
+
+/* En teléfonos más chicos, un toque menos */
+@media (max-width: 375px){
+  .down{ width: 52px; height: 52px; }
+  .down svg{ width: 32px; height: 32px; }
+}
+
+/* iPhone SE y pantallas muy chicas: más espacio entre título y flecha */
+@media (max-width: 375px){
+  .content{
+    /* Reservamos más espacio debajo del texto para que no choque con la flecha */
+    padding-bottom: clamp(56px, 16vh, 104px);
+  }
+
+  /* Coloca la flecha un poco más abajo y respeta la barra inferior de iOS */
+  .down{
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+  }
+}
+
+
+/* ==== Espacio reservado para la flecha en mobile ==== */
+@media (max-width: 768px){
+  .hero{ --down-gap: 84px; } /* espacio que dejamos entre el texto y la flecha */
+  .content{ padding-bottom: var(--down-gap) !important; }
+  .down{
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 12px) !important;
+  }
+}
+
+/* iPhone SE (≤375px): un poco más de colchón */
+@media (max-width: 375px){
+  .hero{ --down-gap: 112px; } /* si lo querés más/menos, subí o bajá este número */
+}
+
+/* al final de Hero.module.css */
+@media (max-width: 768px){
+  .hero{
+    padding-bottom: 0 !important;  /* quita el aire dentro del hero */
+    margin-bottom: 0 !important;   /* por si algún reseteo dejaba margen */
+  }
 }
