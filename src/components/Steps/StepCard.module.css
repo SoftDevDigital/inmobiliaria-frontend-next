@@ -1,0 +1,121 @@
+/* --- Card (desktop igual que antes) --- */
+.card {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #000;
+  color: #fff;
+  border-radius: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;        /* ⬅ centrado vertical del icono */
+  padding: clamp(20px, 3vw, 48px) clamp(16px, 2.5vw, 24px) clamp(16px, 2.5vw, 32px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  outline: none;
+  cursor: default;
+}
+
+/* Icono centrado y responsivo */
+.icon {
+  width: clamp(64px, 10vw, 129px);
+  height: clamp(64px, 10vw, 129px);
+  display: grid;
+  place-items: center;
+  margin-bottom: 0;
+  transition: transform .25s ease;
+}
+/* Soporta tanto <svg> como <img> (Next/Image) */
+.icon :is(svg, img) { width: 100%; height: 100%; display: block; }
+.icon img { object-fit: contain; }
+
+/* Copys ocultos por defecto (desktop/hover) */
+.copy {
+  text-align: center;
+  display: grid;
+  gap: 8px;
+  opacity: 0;
+  max-height: 0;            /* colapsa */
+  overflow: hidden;
+  transform: translateY(6px);
+  transition:
+    opacity .25s ease,
+    max-height .25s ease,
+    transform .25s ease,
+    margin-top .25s ease;
+  margin-top: 0;
+}
+
+/* Reveal al hover / focus (desktop) */
+.card:hover .copy,
+.card:focus-within .copy {
+  opacity: 1;
+  max-height: 500px;
+  transform: translateY(0);
+  margin-top: clamp(10px, 1.2vw, 16px);
+}
+.card:hover .icon,
+.card:focus-within .icon {
+  transform: translateY(-4px);
+}
+
+/* Tipos */
+.title {
+  font-family: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight: 700;
+  font-size: clamp(16px, 2vw, 32px);
+  line-height: 1;
+}
+.text {
+  font-family: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight: 400;
+  font-size: clamp(14px, 1.9vw, 32px);
+  line-height: 1.15;
+  color: #fff;
+}
+
+/* Ajustes extra en pantallas medianas */
+@media (max-width: 900px) {
+  .card { border-radius: 28px; }
+}
+@media (max-width: 360px) {
+  .card { border-radius: 24px; }
+}
+
+/* === MOBILE / TOUCH: más chica y texto SIEMPRE visible ===
+   Usamos (hover:none) para detectar dispositivos táctiles y también
+   reforzamos con un breakpoint por si acaso. */
+@media (hover: none), (max-width: 560px) {
+  .card {
+    aspect-ratio: auto;                          /* deja de ser cuadrada */
+    min-height: clamp(160px, 42vw, 220px);       /* alto razonable en phones */
+    padding: 14px 16px 16px;
+    border-radius: 28px;
+  }
+  .icon {
+    width: clamp(40px, 12vw, 64px);
+    height: clamp(40px, 12vw, 64px);
+    margin-bottom: 8px;
+    transform: none !important;
+  }
+  .copy {
+    opacity: 1;
+    max-height: none;                            /* siempre visible */
+    transform: none;
+    margin-top: 8px;
+    gap: 6px;
+  }
+  .card:hover .copy,
+  .card:focus-within .copy {
+    opacity: 1; max-height: none; transform: none; margin-top: 8px;
+  }
+  .card:hover .icon,
+  .card:focus-within .icon {
+    transform: none;
+  }
+  .title {
+    font-size: clamp(14px, 4.2vw, 18px);
+  }
+  .text {
+    font-size: clamp(12px, 3.6vw, 16px);
+  }
+}

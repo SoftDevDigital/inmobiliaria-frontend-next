@@ -1,0 +1,392 @@
+/* ===== Navbar.module.css (limpio) ===== */
+
+/* Base / Desktop */
+.header{
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #000;
+  color: #fff;
+}
+
+.frame{
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* [logo] [nav] [espacio/burger] */
+  align-items: start;
+
+  padding-left: 151px;
+  padding-right: 151px;
+  padding-top: 54px;
+  padding-bottom: 40px;
+
+  min-height: 173px;
+  width: 100%;
+}
+
+.brand{ justify-self: start; }
+.brandImg{ height: 55px; width: auto; display: block; }
+
+/* Nav desktop (igual que tenías) */
+.nav{
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  gap: 120px;
+  position: relative;
+  top: 16px;
+  left: 350px;
+}
+.nav a{
+  font-family: "IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 26px;
+  color: #fff;
+  text-decoration: none;
+}
+.nav a:hover{ text-decoration: underline; text-underline-offset: 6px; }
+
+/* Botón hamburguesa (oculto en desktop) */
+.burger{
+  display: none;
+  justify-self: end;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Ícono hamburguesa con SVG para que siempre se vea nitido */
+.burger svg{
+  width: 26px;
+  height: 26px;
+  display: block;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: transform .2s ease;
+}
+.burger[aria-expanded="true"] svg{ transform: rotate(90deg); }
+
+/* Drawer mobile */
+.mobile{
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+.mobile.open{ opacity: 1; pointer-events: auto; }
+
+.mobile::before{
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.5);
+}
+
+.mobileInner{
+  position: absolute;
+  right: 0; top: 0;
+  width: min(80vw, 340px);
+  height: 100%;
+  background: #000;
+  padding: 24px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transform: translateX(100%);
+  transition: transform .25s ease;
+}
+.mobile.open .mobileInner{ transform: translateX(0); }
+
+.mobileInner a{
+  color: #fff;
+  font: 500 18px/1.2 "IBM Plex Sans", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  text-decoration: none;
+}
+.mobileInner a:hover{ text-decoration: underline; }
+
+/* ===== Breakpoints ===== */
+
+@media (max-width: 1280px){
+  .frame{ padding-left: 80px; padding-right: 80px; }
+  .nav{ gap: 80px; left: 0; }
+}
+
+/* <= 900px: ocultar nav desktop y mostrar burger */
+@media (max-width: 900px){
+  .frame{
+    grid-template-columns: auto 1fr auto;   /* logo | espacio | burger */
+    align-items: center;
+    min-height: auto;
+    padding-block: 16px;
+    padding-left: 24px;
+    padding-right: 16px;
+  }
+
+  .brandImg{ height: 40px; }
+  .nav{ display: none !important; }    /* <-- forzamos oculto */
+  .burger{ display: inline-flex; }
+}
+
+@media (max-width: 680px){
+  .brandImg{ height: 32px; }
+}
+
+@media (max-width: 430px){
+  .frame{
+    padding-left: 16px;
+    padding-right: 12px;
+    padding-top: calc(12px + env(safe-area-inset-top));
+    padding-bottom: 12px;
+  }
+  .brandImg{ height: 28px; }
+}
+
+@media (max-width: 360px){
+  .brandImg{ height: 24px; }
+}
+
+
+/* Drawer mobile (añadidos) */
+.mobile{
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+.mobile.open{ opacity: 1; pointer-events: auto; }
+
+/* Fondo clickeable */
+.scrim{
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  border: 0;
+  padding: 0;
+  cursor: default;
+}
+
+/* Panel */
+.mobileInner{
+  position: absolute;
+  right: 0; top: 0;
+  width: min(80vw, 340px);
+  height: 100%;
+  background: #000;
+  padding: 24px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transform: translateX(100%);
+  transition: transform .25s ease;
+  z-index: 1; /* por encima del scrim */
+}
+.mobile.open .mobileInner{ transform: translateX(0); }
+
+/* Botón X */
+.close{
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+.close svg{ width: 24px; height: 24px; display: block; }
+
+/* Panel (cuadrado, alto auto) */
+.mobileInner{
+  position: absolute;
+  right: 12px;                 /* pequeño margen al borde */
+  top: 12px;
+  width: min(86vw, 340px);     /* ancho razonable */
+  height: auto;                /* ⬅️ antes 100% */
+  max-height: calc(100dvh - 24px);   /* por si el contenido crece */
+  overflow: auto;              /* permite scroll si hace falta */
+
+  background: #000;
+  border-radius: 16px;         /* que parezca tarjeta */
+  box-shadow: 0 12px 40px rgba(0,0,0,.35);
+  padding: 16px 20px 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  transform: translateX(100%);     /* animación desde la derecha */
+  transition: transform .25s ease, opacity .2s ease;
+  z-index: 1;                      /* por encima del scrim */
+}
+.mobile.open .mobileInner{ transform: translateX(0); }
+
+/* Header SIEMPRE fijo */
+.header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: #000;
+  color: #fff;
+  /* mejora de rendimiento */
+  will-change: transform;
+}
+
+/* separador con la altura del header */
+.spacer{
+  height: 173px;          /* igual que el min-height de .frame en desktop */
+}
+
+/* Ajusta el alto del spacer en tus breakpoints */
+@media (max-width: 900px){
+  .spacer{ height: 72px; }  /* aprox: padding + logo en móvil */
+}
+@media (max-width: 430px){
+  .spacer{ height: 60px; }
+}
+
+
+/* ===== Ajustes de tamaños (sobrescribe) ===== */
+
+/* Logo más chico en desktop */
+.brandImg{
+  height: 42px;          /* antes 55px */
+  width: auto;
+  display: block;
+}
+
+/* Texto del menú desktop más chico */
+.nav{
+  gap: 72px;             /* antes 120px (opcional, un poco menos de separación) */
+  top: 10px;             /* bajamos un toque el offset vertical */
+}
+.nav a{
+  font-size: 18px;       /* antes 20px */
+  line-height: 24px;
+}
+
+/* (Opcional) más compacto aún en pantallas muy anchas */
+@media (min-width: 1440px){
+  .brandImg{ height: 38px; }
+  .nav a{ font-size: 17px; }
+}
+
+/* NOTA:
+   No cambié la altura del header ni el spacer.
+   Si querés que todo el header sea más bajito, bajá también:
+   .frame { padding-top: 40px; padding-bottom: 28px; min-height: 136px; }
+   .spacer { height: 136px; }
+*/
+
+/* ==== NAVBAR MÁS BAJA (solo desktop ≥901px) ==== */
+@media (min-width: 901px){
+  .frame{
+    /* antes: pt:54px, pb:40px, min-height:173px */
+           padding-top: 22px;
+        padding-bottom: 23px;
+    min-height: 0;            /* quitamos el mínimo */
+    align-items: center;      /* centra verticalmente logo + nav */
+  }
+
+  /* logo un poco más chico (opcional) */
+  .brandImg{ height: 34px; }  /* antes 42px/55px */
+
+  /* el nav ya no necesita “top” para bajar */
+  .nav{ top: 0; }
+
+  /* el separador debe igualar la nueva altura real del header:
+     12 + 34 + 12 = 58px */
+  .spacer{ height: 58px; }    /* antes 173px */
+}
+
+/* Mostrar/ocultar por breakpoint */
+.brandImgDesktop { display: block; }
+.brandImgMobile  { display: none; }
+
+@media (max-width: 900px){
+  .brandImgDesktop { display: none; }
+  .brandImgMobile  { display: block; }
+}
+
+/* Reutiliza los tamaños que ya tenías en mobile */
+@media (max-width: 900px){
+  .brandImgMobile { height: 40px; }
+}
+@media (max-width: 680px){
+  .brandImgMobile { height: 32px; }
+}
+@media (max-width: 430px){
+  .brandImgMobile { height: 60px;}
+}
+@media (max-width: 360px){
+  .brandImgMobile { height: 24px; }
+}
+
+
+@media (max-width: 900px){
+  /* barra negra fija, compacta */
+  .header{
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #000;
+    z-index: 1000;
+  }
+
+  .frame{
+    grid-template-columns: auto 1fr auto; /* [logo] [espacio] [hamb] */
+    align-items: center;
+    min-height: 0;
+    /* alto visual ≈ 60px (safe-area incluido) */
+    padding-top: calc(12px + env(safe-area-inset-top));
+    padding-bottom: 12px;
+    padding-left: 16px;
+    padding-right: 12px;
+  }
+
+  /* ocultamos el nav de desktop */
+  .nav{ display: none !important; }
+
+  /* logo mobile: wordmark largo, no el ícono */
+  .brandImgMobile{
+    display: block !important;
+    height: 28px;         /* se ve como la foto */
+    width: auto;          /* mantiene proporción */
+  }
+
+  /* hamburguesa a la derecha, tamaño cómodo */
+  .burger{
+    display: inline-flex;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+  }
+  .burger svg{
+    width: 24px;
+    height: 24px;
+    stroke: #fff;
+  }
+
+  /* el separador debe igualar la altura real del header */
+  .spacer{ height: 60px; } /* ~12 + 28 + 12 */
+}
+
+/* iPhone 14/15 (≤430px): micro-ajuste si lo ves un pelín alto */
+@media (max-width: 430px){
+  .brandImgMobile{ height: 26px; }
+  .spacer{ height: 56px; } /* 12 + 26 + 12 + safe-area típico */
+}

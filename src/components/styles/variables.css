@@ -1,0 +1,8 @@
+:root {
+  --brand-black: #0f0f10;
+  --brand-white: #ffffff;
+  --brand-gray: #1b1b1b; /* para navbar */
+  --text-color: #111;
+  --muted: #666;
+  --radius-xl: 16px;
+}
