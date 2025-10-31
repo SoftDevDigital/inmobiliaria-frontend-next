@@ -3,7 +3,7 @@
   /* si algún navegador muestra 1px de scroll horizontal, descomenta: */
   /* overflow-x: clip; */
 }
-
+/*
 /* 4 columnas en desktop SIN desbordar el viewport */
 .grid {
   /* paddings y gap fluidos */
