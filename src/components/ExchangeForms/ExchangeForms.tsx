@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import styles from './ExchangeForms.module.css';
+import { submitContactForm } from '@/lib/api';
 
 type Tab = 'canjea' | 'forma';
 
@@ -58,7 +59,9 @@ export default function ExchangeForms() {
     }
   };
 
-  const onSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Obtener el formulario que disparó el evento
@@ -86,11 +89,24 @@ export default function ExchangeForms() {
       });
     }
     
-    console.log('📤 Formulario enviado:', datos);
-    // TODO: Aquí iría la llamada a tu API/backend
-    // await fetch('/api/contacto', { method: 'POST', body: JSON.stringify(datos) });
-    
-    alert(`¡Enviado! (Tipo: ${tipoFormulario === 'canjea' ? 'CANJEA' : 'FORMÁ PARTE'})`);
+    try {
+      setIsSubmitting(true);
+      console.log('📤 Formulario enviado:', datos);
+      
+      await submitContactForm(datos);
+      
+      alert(`¡Enviado exitosamente! (Tipo: ${tipoFormulario === 'canjea' ? 'CANJEA' : 'FORMÁ PARTE'})`);
+      
+      // Limpiar el formulario después del envío exitoso
+      form.reset();
+      setCoords('');
+      setPhotoName('');
+    } catch (error) {
+      console.error('Error al enviar formulario:', error);
+      alert('Hubo un error al enviar el formulario. Por favor, intentá nuevamente.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // ---------- altura constante ----------
@@ -249,7 +265,9 @@ export default function ExchangeForms() {
                     {photoName && `Foto: ${photoName}`}
                   </p>
                 )}
-                <button className={styles.submit} type="submit">Enviar</button>
+                <button className={styles.submit} type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? 'Enviando...' : 'Enviar'}
+                </button>
               </div>
             </form>
 
@@ -280,7 +298,9 @@ export default function ExchangeForms() {
               </label>
 
               <div className={styles.footer}>
-                <button className={styles.submit} type="submit">Enviar</button>
+                <button className={styles.submit} type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? 'Enviando...' : 'Enviar'}
+                </button>
               </div>
             </form>
           </div>
