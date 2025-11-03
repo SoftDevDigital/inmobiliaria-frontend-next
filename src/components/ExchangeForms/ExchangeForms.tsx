@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import styles from './ExchangeForms.module.css';
+import { submitContactForm } from '@/lib/api';
 
 type Tab = 'canjea' | 'forma';
 
@@ -58,9 +59,54 @@ export default function ExchangeForms() {
     }
   };
 
-  const onSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('¡Enviado!');
+    
+    // Obtener el formulario que disparó el evento
+    const form = e.currentTarget as HTMLFormElement;
+    const formData = new FormData(form);
+    
+    // Identificar el tipo de formulario basándose en qué tab está activo
+    const tipoFormulario = tab; // 'canjea' | 'forma'
+    
+    // Extraer los datos del formulario
+    const datos = {
+      tipo: tipoFormulario, // ⬅️ AQUÍ SE DIFERENCIA: 'canjea' o 'forma'
+      nombre: formData.get('nombre') as string,
+      mail: formData.get('mail') as string,
+      telefono: formData.get('telefono') as string,
+      mensaje: formData.get('mensaje') as string,
+    };
+    
+    // Datos adicionales solo para "Canjea"
+    if (tipoFormulario === 'canjea') {
+      Object.assign(datos, {
+        empresa: formData.get('empresa') as string,
+        ubicacion: coords,
+        foto: photoName,
+      });
+    }
+    
+    try {
+      setIsSubmitting(true);
+      console.log('📤 Formulario enviado:', datos);
+      
+      await submitContactForm(datos);
+      
+      alert(`¡Enviado exitosamente! (Tipo: ${tipoFormulario === 'canjea' ? 'CANJEA' : 'FORMÁ PARTE'})`);
+      
+      // Limpiar el formulario después del envío exitoso
+      form.reset();
+      setCoords('');
+      setPhotoName('');
+    } catch (error) {
+      console.error('Error al enviar formulario:', error);
+      alert('Hubo un error al enviar el formulario. Por favor, intentá nuevamente.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   // ---------- altura constante ----------
@@ -149,13 +195,13 @@ export default function ExchangeForms() {
             >
               <label>
                 Nombre y apellido
-                <input type="text" required />
+                <input type="text" name="nombre" required />
               </label>
 
               <div className={styles.row}>
                 <label className={styles.stretch}>
                   Nombre de la empresa
-                  <input type="text" />
+                  <input type="text" name="empresa" />
                 </label>
 
                 <div className={styles.actions}>
@@ -188,18 +234,18 @@ export default function ExchangeForms() {
 
               <label>
                 Mail
-                <input type="email" required />
+                <input type="email" name="mail" required />
               </label>
 
               <label>
                 Teléfono
-                <input type="tel" required />
+                <input type="tel" name="telefono" required />
               </label>
 
               <label className={styles.full}>
                 Contanos un poco más
                 {/* fijamos una altura mínima para evitar micro saltos */}
-                <textarea rows={8} className={styles.textarea} />
+                <textarea rows={8} name="mensaje" className={styles.textarea} />
               </label>
 
               <div className={styles.footer}>
@@ -219,7 +265,9 @@ export default function ExchangeForms() {
                     {photoName && `Foto: ${photoName}`}
                   </p>
                 )}
-                <button className={styles.submit} type="submit">Enviar</button>
+                <button className={styles.submit} type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? 'Enviando...' : 'Enviar'}
+                </button>
               </div>
             </form>
 
@@ -231,26 +279,28 @@ export default function ExchangeForms() {
             >
               <label>
                 Nombre y apellido
-                <input type="text" required />
+                <input type="text" name="nombre" required />
               </label>
 
               <label>
                 Mail
-                <input type="email" required />
+                <input type="email" name="mail" required />
               </label>
 
               <label>
                 Teléfono
-                <input type="tel" required />
+                <input type="tel" name="telefono" required />
               </label>
 
               <label className={styles.full}>
                 Contanos un poco más
-                <textarea rows={8} className={styles.textarea} />
+                <textarea rows={8} name="mensaje" className={styles.textarea} />
               </label>
 
               <div className={styles.footer}>
-                <button className={styles.submit} type="submit">Enviar</button>
+                <button className={styles.submit} type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? 'Enviando...' : 'Enviar'}
+                </button>
               </div>
             </form>
           </div>
