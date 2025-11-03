@@ -1,5 +1,5 @@
 // Configuración de la API del backend
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
 
 export interface ContactFormData {
   tipo: 'canjea' | 'forma';
@@ -39,5 +39,4 @@ export const submitContactForm = async (data: ContactFormData): Promise<ContactR
     throw error;
   }
 };
-
 
