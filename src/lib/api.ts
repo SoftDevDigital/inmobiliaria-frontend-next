@@ -1,5 +1,5 @@
 // Configuración de la API del backend
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.intercanjes.com';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.intercanjes.com/api';
 
 export interface ContactFormData {
   tipo: 'canjea' | 'forma';
@@ -39,4 +39,5 @@ export const submitContactForm = async (data: ContactFormData): Promise<ContactR
     throw error;
   }
 };
+
 
