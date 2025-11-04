@@ -10,15 +10,30 @@ type Tab = 'canjea' | 'forma';
 export default function ExchangeForms() {
   const [tab, setTab] = useState<Tab>('canjea');
 
-  // extras opcionales para los botones de “canjea”
+  // extras opcionales para los botones de "canjea"
   const fileRef = useRef<HTMLInputElement>(null);
-  const [photoName, setPhotoName] = useState('');
+  const [fotos, setFotos] = useState<File[]>([]);
   const [coords, setCoords] = useState('');
   const [locLoading, setLocLoading] = useState(false);
 
   const handlePhoto = () => fileRef.current?.click();
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPhotoName(e.target.files?.[0]?.name ?? '');
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      // Convertir FileList a Array y agregar a las fotos existentes
+      const newFiles = Array.from(files);
+      // Validar que no exceda 10 fotos en total
+      const totalFotos = fotos.length + newFiles.length;
+      if (totalFotos > 10) {
+        alert(`Puedes subir máximo 10 fotos. Ya tienes ${fotos.length} y estás intentando agregar ${newFiles.length}.`);
+        return;
+      }
+      setFotos(prev => [...prev, ...newFiles]);
+    }
+  };
+
+  const removeFoto = (index: number) => {
+    setFotos(prev => prev.filter((_, i) => i !== index));
   };
 
   // ✅ Geolocalización con permisos + timeout + fallback manual
@@ -82,25 +97,37 @@ export default function ExchangeForms() {
     
     // Datos adicionales solo para "Canjea"
     if (tipoFormulario === 'canjea') {
-      Object.assign(datos, {
-        empresa: formData.get('empresa') as string,
-        ubicacion: coords,
-        foto: photoName,
-      });
+      const empresa = formData.get('empresa') as string;
+      if (empresa) {
+        Object.assign(datos, { empresa });
+      }
+      if (coords) {
+        Object.assign(datos, { ubicacion: coords });
+      }
+      // Agregar fotos si hay
+      if (fotos.length > 0) {
+        Object.assign(datos, { fotos });
+      }
     }
     
     try {
       setIsSubmitting(true);
-      console.log('📤 Formulario enviado:', datos);
+      console.log('📤 Formulario enviado:', { ...datos, fotos: fotos.length > 0 ? `${fotos.length} archivo(s)` : 'ninguna' });
       
-      await submitContactForm(datos);
+      const result = await submitContactForm(datos);
       
-      alert(`¡Enviado exitosamente! (Tipo: ${tipoFormulario === 'canjea' ? 'CANJEA' : 'FORMÁ PARTE'})`);
+      const mensajeExito = fotos.length > 0 
+        ? `¡Enviado exitosamente! (Tipo: ${tipoFormulario === 'canjea' ? 'CANJEA' : 'FORMÁ PARTE'}, ${fotos.length} foto(s) enviada(s))`
+        : `¡Enviado exitosamente! (Tipo: ${tipoFormulario === 'canjea' ? 'CANJEA' : 'FORMÁ PARTE'})`;
+      alert(mensajeExito);
       
       // Limpiar el formulario después del envío exitoso
       form.reset();
       setCoords('');
-      setPhotoName('');
+      setFotos([]);
+      if (fileRef.current) {
+        fileRef.current.value = '';
+      }
     } catch (error) {
       console.error('Error al enviar formulario:', error);
       alert('Hubo un error al enviar el formulario. Por favor, intentá nuevamente.');
@@ -131,7 +158,7 @@ export default function ExchangeForms() {
   }, []);
 
   // si cambian datos que pueden alterar la altura, re-medir
-  useEffect(() => { measure(); }, [tab, coords, photoName]);
+  useEffect(() => { measure(); }, [tab, coords, fotos]);
 
   const mapsHref = coords ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(coords)}` : '';
 
@@ -209,13 +236,14 @@ export default function ExchangeForms() {
                     <span aria-hidden>📍</span> {locLoading ? 'Buscando...' : 'Colocar ubicación'}
                   </button>
                   <button type="button" onClick={handlePhoto} className={styles.actionBtn}>
-                    <span aria-hidden>📷</span> Agrega una foto
+                    <span aria-hidden>📷</span> {fotos.length > 0 ? `Agregar más (${fotos.length})` : 'Agrega fotos'}
                   </button>
                   <input
                     ref={fileRef}
                     className={styles.hiddenInput}
                     type="file"
-                    accept="image/*"
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                    multiple
                     onChange={onFileChange}
                   />
                 </div>
@@ -249,7 +277,7 @@ export default function ExchangeForms() {
               </label>
 
               <div className={styles.footer}>
-                {(coords || photoName) && (
+                {(coords || fotos.length > 0) && (
                   <p className={styles.meta}>
                     {coords && (
                       <>
@@ -261,9 +289,57 @@ export default function ExchangeForms() {
                         )}
                       </>
                     )}
-                    {coords && photoName && ' · '}
-                    {photoName && `Foto: ${photoName}`}
+                    {coords && fotos.length > 0 && ' · '}
+                    {fotos.length > 0 && (
+                      <span>
+                        {fotos.length} foto{fotos.length > 1 ? 's' : ''} seleccionada{fotos.length > 1 ? 's' : ''}
+                        {fotos.length > 0 && ':'}
+                        {fotos.map((foto, idx) => (
+                          <span key={idx} style={{ marginLeft: '8px', fontSize: '0.9em' }}>
+                            {foto.name}
+                            {idx < fotos.length - 1 && ', '}
+                          </span>
+                        ))}
+                      </span>
+                    )}
                   </p>
+                )}
+                {fotos.length > 0 && (
+                  <div style={{ marginBottom: '12px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {fotos.map((foto, idx) => (
+                      <span 
+                        key={idx} 
+                        style={{ 
+                          display: 'inline-flex', 
+                          alignItems: 'center', 
+                          gap: '6px',
+                          padding: '4px 8px',
+                          background: '#1f2937',
+                          borderRadius: '4px',
+                          fontSize: '0.85em',
+                          color: '#e5e7eb'
+                        }}
+                      >
+                        {foto.name}
+                        <button
+                          type="button"
+                          onClick={() => removeFoto(idx)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#ef4444',
+                            cursor: 'pointer',
+                            padding: '0',
+                            marginLeft: '4px',
+                            fontSize: '1.2em'
+                          }}
+                          aria-label={`Eliminar ${foto.name}`}
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
                 )}
                 <button className={styles.submit} type="submit" disabled={isSubmitting}>
                   {isSubmitting ? 'Enviando...' : 'Enviar'}
